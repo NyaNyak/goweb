@@ -1,12 +1,18 @@
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
 
-var playerSpeed = 4;
+const myAudio = document.getElementById("bgm");
 
-var rightPressed = false;
-var leftPressed = false;
-var upPressed = false;
-var downPressed = false;
+let playerSpeed = 4;
+
+let rightPressed = false;
+let leftPressed = false;
+let upPressed = false;
+let downPressed = false;
+
+let players = [];
+let playerMap = {};
+let myId;
 
 function Player(id, color) {
   this.id = id;
@@ -20,10 +26,6 @@ function Player(id, color) {
   setImage(this.img, color, this.dir);
   //setImage(this.color);
 }
-
-var players = [];
-var playerMap = {};
-var myId;
 
 function setImage(img, color, dir) {
   if (color == "red") {
@@ -99,7 +101,7 @@ updateState = (id, x, y) => {
   player.y = y;
 };
 
-var socket = io();
+let socket = io();
 
 socket.on("user_id", (data) => {
   myId = data;
@@ -126,6 +128,7 @@ sendData = () => {
 
 renderPlayer = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  myAudio.play();
 
   for (let i = 0; i < players.length; i++) {
     let player = players[i];
@@ -141,8 +144,8 @@ renderPlayer = () => {
   }
 
   let curPlayer = playerMap[myId];
-  const minX = 5,
-    minY = 5;
+  const minX = 5;
+  const minY = 5;
   const maxX = canvas.width - 60;
   const maxY = canvas.height - 85;
 
