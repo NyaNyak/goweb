@@ -146,115 +146,38 @@ renderPlayer = () => {
   const maxX = canvas.width - 60;
   const maxY = canvas.height - 85;
 
-  if (curPlayer.x <= minX) {
-    if (rightPressed) {
-      curPlayer.x += playerSpeed;
-      curPlayer.dir = "right";
-    }
-    if (leftPressed) {
-      curPlayer.x -= 0;
-      curPlayer.dir = "left";
-    }
-    if (upPressed) {
-      if (curPlayer.y <= minY) {
-        curPlayer.y -= 0;
-      } else {
-        curPlayer.y -= playerSpeed;
-      }
-    }
-    if (downPressed) {
-      if (curPlayer.y >= maxY) {
-        curPlayer.y += 0;
-      } else {
-        curPlayer.y += playerSpeed;
-      }
-    }
-  } else if (curPlayer.x >= maxX) {
-    if (rightPressed) {
+  if (rightPressed) {
+    if (curPlayer.x >= maxX) {
       curPlayer.x += 0;
       curPlayer.dir = "right";
-    }
-    if (leftPressed) {
-      curPlayer.x -= playerSpeed;
-      curPlayer.dir = "left";
-    }
-    if (upPressed) {
-      if (curPlayer.y <= minY) {
-        curPlayer.y -= 0;
-      } else {
-        curPlayer.y -= playerSpeed;
-      }
-    }
-    if (downPressed) {
-      if (curPlayer.y >= maxY) {
-        curPlayer.y += 0;
-      } else {
-        curPlayer.y += playerSpeed;
-      }
-    }
-  } else if (curPlayer.y <= minY) {
-    if (rightPressed) {
-      curPlayer.dir = "right";
-      if (curPlayer.x >= maxX) {
-        curPlayer.x += 0;
-      } else {
-        curPlayer.x += playerSpeed;
-      }
-    }
-    if (leftPressed) {
-      curPlayer.dir = "left";
-      if (curPlayer.x <= minX) {
-        curPlayer.x -= 0;
-      } else {
-        curPlayer.x -= playerSpeed;
-      }
-    }
-    if (upPressed) {
-      curPlayer.y -= 0;
-    }
-    if (downPressed) {
-      curPlayer.y += playerSpeed;
-    }
-  } else if (curPlayer.y >= maxY) {
-    if (rightPressed) {
-      curPlayer.dir = "right";
-      if (curPlayer.x >= maxX) {
-        curPlayer.x += 0;
-      } else {
-        curPlayer.x += playerSpeed;
-      }
-    }
-    if (leftPressed) {
-      curPlayer.dir = "left";
-      if (curPlayer.x <= minX) {
-        curPlayer.x -= 0;
-      } else {
-        curPlayer.x -= playerSpeed;
-      }
-    }
-    if (upPressed) {
-      curPlayer.y -= playerSpeed;
-    }
-    if (downPressed) {
-      curPlayer.y += 0;
-    }
-  } else {
-    if (rightPressed) {
-      curPlayer.dir = "right";
+    } else {
       curPlayer.x += playerSpeed;
+      curPlayer.dir = "right";
     }
-    if (leftPressed) {
+  }
+  if (leftPressed) {
+    if (curPlayer.x <= minX) {
+      curPlayer.x -= 0;
       curPlayer.dir = "left";
+    } else {
       curPlayer.x -= playerSpeed;
+      curPlayer.dir = "left";
     }
-    if (upPressed) {
+  }
+  if (upPressed) {
+    if (curPlayer.y <= minY) {
+      curPlayer.y -= 0;
+    } else {
       curPlayer.y -= playerSpeed;
     }
-    if (downPressed) {
+  }
+  if (downPressed) {
+    if (curPlayer.y >= maxY) {
+      curPlayer.y += 0;
+    } else {
       curPlayer.y += playerSpeed;
     }
   }
-
   sendData();
 };
 
