@@ -35,7 +35,7 @@ class Player {
     this.socket = socket;
     this.x = startX;
     this.y = startY;
-    //this.color
+    this.color = "red";
   }
 
   get id() {
@@ -45,9 +45,16 @@ class Player {
 
 var players = [];
 var playerMap = {};
+var isRed = true;
 
 joinGame = (socket) => {
   let player = new Player(socket);
+
+  if (isRed) {
+    isRed = false;
+  } else {
+    player.color = "blue";
+  }
 
   players.push(player);
   playerMap[socket.id] = player;
@@ -58,6 +65,9 @@ joinGame = (socket) => {
 endGame = (socket) => {
   for (let i = 0; i < players.length; i++) {
     if (players[i].id == socket.id) {
+      if (players[i].color == "red") {
+        isRed = true;
+      }
       players.splice(i, 1);
       break;
     }
@@ -86,6 +96,7 @@ io.on("connection", (socket) => {
         id: player.id,
         x: player.x,
         y: player.y,
+        color: player.color,
       });
     }
 
@@ -93,6 +104,7 @@ io.on("connection", (socket) => {
       id: socket.id,
       x: newPlayer.x,
       y: newPlayer.y,
+      color: newPlayer.color,
     });
 
     socket.on("send_location", (data) => {
