@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang=""en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shooting Game</title>
+    <style>
+        #background {text-align: center; margin-bottom: -4px; margin-top: 10px;}
+        * {padding : 0; margin: 0;}
+        canvas {background: #ebc78d; display: block; margin: 0 auto;}
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <div id="background">
+        <img src="../resource/background.png" width="800" height="220"/>
+    </div>
+    
+    <canvas id = "myCanvas" width="800" height="500"></canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var radius = 16
+        var playerSpeed = 4
+
+        var rightPressed = false;
+        var leftPressed = false;
+        var upPressed = false;
+        var downPressed = false;
+
+        function Player(id) {
+            this.id = id;
+            this.x = 800/2;
+            this.y = 768/2; 
+        }
+
+        var players = [];
+        var playerMap = {};
+        var myId;
+
+        
+        keyDownHandler = (e) => {
+            if (e.code == 'ArrowRight'){
+                rightPressed = true;
+            }
+            if (e.code == 'ArrowLeft'){
+                leftPressed = true;
+            }
+            if(e.code == "ArrowDown"){
+                downPressed = true;
+            }
+            if(e.code == "ArrowUp"){
+                upPressed = true;
+            }
+        }
+        
+        keyUpHandler = (e) => {
+            if (e.code == "ArrowRight"){
+                rightPressed = false;
+            }
+            if (e.code == "ArrowLeft"){
+                leftPressed = false;
+            }
+            if(e.code == "ArrowDown"){
+                downPressed = false;
+            }
+            if(e.code == "ArrowUp"){
+                upPressed = false;
+            }
+        }
+
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+        
+        joinUser = (id, x, y) => {
+            let player = new Player(id);
+            player.x = x;
+            player.y = y;
+
+            players.push(player);
+            playerMap[id] = player;
+
+            return player;
+        }
+
+        leaveUser = (id) => {
+            for (let i = 0;i < players.length;i++){
+                if (players[i].id == id){
+                    players.splice(i, 1);
+                    break;
+                }
+            }
+            delete playerMap[id];
+        }
+
+        updateState = (id, x, y) => {
+            let player = playerMap[id];
+            if (!player){
+                return;
+            }
+            player.x = x;
+            player.y = y;
+        }
+
+        var socket = io();
+
+        socket.on('user_id', (data) => {
+            myId = data;
+        });
+        socket.on('join_user', (data) => {
+            joinUser(data.id, data.x, data.y);
+        })
+        socket.on('leave_user', (data) => {
+            leaveUser(data);
+        })
+        socket.on('update_state', (data) => {
+            updateState(data.id, data.x, data.y);
+        })
+        
+        sendData = () => {
+            let curPlayer = playerMap[myId];
+            let data = {
+                id: curPlayer.id,
+                x: curPlayer.x,
+                y: curPlayer.y,
+            };
+            if (data) socket.emit("send_location", data);
+        }
+
+        renderPlayer = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0;i < players.length;i++){
+                let player = players[i];
+
+                ctx.beginPath();
+                ctx.arc(player.x, player.y, radius, 0, Math.PI * 2, true);
+                ctx.stroke();
+                ctx.closePath();
+
+                ctx.beginPath();
+                ctx.font = '15px Arial';
+                ctx.fillText(`player ${i}`, player.x-radius-7, player.y-radius);
+                ctx.closePath();
+            }
+
+            let curPlayer = playerMap[myId];
+                if (rightPressed){
+                    curPlayer.x += playerSpeed;
+                }
+                if (leftPressed){
+                    curPlayer.x -= playerSpeed;
+                }
+                if (upPressed){
+                    curPlayer.y -= playerSpeed;
+                }
+                if (downPressed){
+                    curPlayer.y += playerSpeed;
+                }
+                sendData();
+        }
+
+        update = () => {
+            renderPlayer();
+        }
+        //renderPlayer();
+        setInterval(update, 10);
+
+    </script>
+</body>
+
+</html>
