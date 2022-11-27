@@ -106,7 +106,7 @@ keyDownHandler = (e) => {
     upPressed = true;
   }
   if (e.keyCode == 32) {
-    spacePressed = true;
+    spacePressed = false;
   }
 };
 
@@ -124,7 +124,7 @@ keyUpHandler = (e) => {
     upPressed = false;
   }
   if (e.keyCode == 32) {
-    spacePressed = false;
+    spacePressed = true;
   }
 };
 
