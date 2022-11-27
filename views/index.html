@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shooting Game</title>
     <style>
+        body{background-color: #424242;}
         #background {text-align: center; margin-bottom: -4px; margin-top: 10px;}
         * {padding : 0; margin: 0;}
         canvas {background: #ebc78d; display: block; margin: 0 auto;}
@@ -35,11 +36,7 @@
             this.x = 800/2;
             this.y = 520/2;
             this.img = new Image();
-            this.dir = "right";
-            if (color == "blue") {
-                this.dir = "left";
-            }
-            setImage(this.img, color, this.dir)
+            setImage(this.img, color)
             //setImage(this.color);
         }
 
@@ -47,13 +44,11 @@
         var playerMap = {};
         var myId;
 
-        function setImage(img, color, dir){
+        function setImage(img, color){
             if (color == "red") {
-                if (dir == "left") img.src = "/resource/player1_left.png";
-                else img.src = "/resource/player1_right.png";
+                img.src = "/resource/player1_right.png";
             } else {
-                if (dir == "left" ) img.src = "/resource/player2_left.png";
-                else img.src = "/resource/player2_right.png";
+                img.src = "/resource/player2_left.png";
             }
         }
         
@@ -151,8 +146,6 @@
 
             for (let i = 0;i < players.length;i++){
                 let player = players[i];
-
-                setImage(player.img, player.color, player.dir);
         
                 ctx.drawImage(player.img, player.x, player.y, 60, 60);
 
@@ -166,15 +159,13 @@
             const minX = 5, minY = 5;
             const maxX = canvas.width - 60;
             const maxY =canvas.height - 85;
-
+            
             if(curPlayer.x <= minX){
                 if (rightPressed){
                     curPlayer.x += playerSpeed;
-                    curPlayer.dir = "right";
                 }
                 if (leftPressed){
                     curPlayer.x -= 0;
-                    curPlayer.dir = "left";
                 }
                 if (upPressed){
                     if(curPlayer.y <= minY){
@@ -193,11 +184,9 @@
             }else if(curPlayer.x >= maxX){
                 if (rightPressed){
                     curPlayer.x += 0;
-                    curPlayer.dir = "right"
                 }
                 if (leftPressed){
                     curPlayer.x -= playerSpeed;
-                    curPlayer.dir = "left";
                 }
                 if (upPressed){
                     if(curPlayer.y <= minY){
@@ -215,7 +204,6 @@
                 }
             }else if(curPlayer.y <= minY){
                 if (rightPressed){
-                    curPlayer.dir = "right";
                     if(curPlayer.x >= maxX){
                         curPlayer.x += 0;
                     }else{
@@ -223,7 +211,6 @@
                     }
                 }
                 if (leftPressed){
-                    curPlayer.dir = "left";
                     if(curPlayer.x <= minX){
                         curPlayer.x -= 0;
                     }else{
@@ -238,7 +225,6 @@
                 }
             }else if(curPlayer.y >= maxY){
                 if (rightPressed){
-                    curPlayer.dir = "right";
                     if(curPlayer.x >= maxX){
                         curPlayer.x += 0;
                     }else{
@@ -246,7 +232,6 @@
                     }
                 }
                 if (leftPressed){
-                    curPlayer.dir = "left";
                     if(curPlayer.x <= minX){
                         curPlayer.x -= 0;
                     }else{
@@ -261,11 +246,9 @@
                 }
             }else{
                 if (rightPressed){
-                    curPlayer.dir = "right";
                     curPlayer.x += playerSpeed;
                 }
                 if (leftPressed){
-                    curPlayer.dir = "left";
                     curPlayer.x -= playerSpeed;
                 }
                 if (upPressed){
@@ -275,7 +258,6 @@
                     curPlayer.y += playerSpeed;
                 }
             }
-        
                 
             sendData();
         }
