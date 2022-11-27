@@ -24,7 +24,7 @@ server.listen(9999, () => {
 app.use(express.static("views"));
 
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/views/index.html");
+  res.sendFile(__dirname + "/views/game.html");
 });
 
 const startX = 800 / 2;
