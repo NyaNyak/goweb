@@ -2,6 +2,7 @@ const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
 const myAudio = document.getElementById("bgm");
+const effect = new Audio("./resource/gunfire.mp3");
 
 let playerSpeed = 3;
 
@@ -239,6 +240,9 @@ renderPlayer = () => {
   }
   if (spacePressed) {
     createBullet(curPlayer.dir, curPlayer.x, curPlayer.y);
+    effect.load();
+    effect.loop = false;
+    effect.play();
     spacePressed = false;
   }
 };
