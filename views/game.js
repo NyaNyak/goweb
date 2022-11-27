@@ -3,16 +3,19 @@ const ctx = canvas.getContext("2d");
 
 const myAudio = document.getElementById("bgm");
 
-let playerSpeed = 4;
+let playerSpeed = 3;
 
 let rightPressed = false;
 let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
+let spacePressed = false;
 
 let players = [];
 let playerMap = {};
 let myId;
+
+let bullets = [];
 
 function Player(id, color) {
   this.id = id;
@@ -27,6 +30,47 @@ function Player(id, color) {
   //setImage(this.color);
 }
 
+class Bullet {
+  constructor(dir, x, y) {
+    this.x = x;
+    this.y = y + 32;
+    this.dir = dir;
+    this.radius = 4;
+    bullets.push(this);
+  }
+  bulletUpdate(dir) {
+    if (dir == "left") {
+      this.x -= 5;
+    } else {
+      this.x += 5;
+    }
+  }
+  getX() {
+    return this.x;
+  }
+  setX(x) {
+    this.x = x;
+  }
+  getY() {
+    return this.y;
+  }
+  setY(y) {
+    this.y = y;
+  }
+  getDir() {
+    return this.dir;
+  }
+  setDir(dir) {
+    this.dir = dir;
+  }
+  getRadius() {
+    return this.radius;
+  }
+  setRadius() {
+    this.radius = radius;
+  }
+}
+
 function setImage(img, color, dir) {
   if (color == "red") {
     if (dir == "left") img.src = "/resource/player1_left.png";
@@ -34,6 +78,16 @@ function setImage(img, color, dir) {
   } else {
     if (dir == "left") img.src = "/resource/player2_left.png";
     else img.src = "/resource/player2_right.png";
+  }
+}
+
+function createBullet(dir, x, y) {
+  console.log("총알 생성");
+  let b = new Bullet(dir, x, y);
+  if (b.dir == "left") {
+    b.setX(x);
+  } else if (b.dir == "right") {
+    b.setX(x + 60);
   }
 }
 
@@ -50,6 +104,9 @@ keyDownHandler = (e) => {
   if (e.code == "ArrowUp") {
     upPressed = true;
   }
+  if (e.keyCode == 32) {
+    spacePressed = true;
+  }
 };
 
 keyUpHandler = (e) => {
@@ -64,6 +121,9 @@ keyUpHandler = (e) => {
   }
   if (e.code == "ArrowUp") {
     upPressed = false;
+  }
+  if (e.keyCode == 32) {
+    spacePressed = false;
   }
 };
 
@@ -127,12 +187,8 @@ sendData = () => {
 };
 
 renderPlayer = () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  myAudio.play();
-
   for (let i = 0; i < players.length; i++) {
     let player = players[i];
-
     setImage(player.img, player.color, player.dir);
 
     ctx.drawImage(player.img, player.x, player.y, 60, 60);
@@ -181,11 +237,37 @@ renderPlayer = () => {
       curPlayer.y += playerSpeed;
     }
   }
+  if (spacePressed) {
+    createBullet(curPlayer.dir, curPlayer.x, curPlayer.y);
+    spacePressed = false;
+  }
+};
+
+renderBullet = () => {
+  for (let i = 0; i < bullets.length; i++) {
+    let bullet = bullets[i];
+    ctx.beginPath();
+    ctx.fillStyle = "black";
+    ctx.arc(bullet.x, bullet.y, bullet.getRadius(), 0, Math.PI * 2, false);
+    ctx.fill();
+    ctx.closePath();
+
+    bullet.bulletUpdate(bullet.dir);
+  }
+};
+
+renderGame = () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  myAudio.play();
+
+  renderPlayer();
+  renderBullet();
+
   sendData();
 };
 
 update = () => {
-  renderPlayer();
+  renderGame();
 };
 //renderPlayer();
 setInterval(update, 10);

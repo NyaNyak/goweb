@@ -4,6 +4,15 @@ const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 
+const startX = 800 / 2;
+const startY = 520 / 2;
+
+let players = [];
+let playerMap = {};
+let isRed = true;
+let isFailed = false;
+let isStart = false;
+
 /*
 handler = (req, res) => {
   fs.readFile(__dirname + "/views/index.html", (err, data) => {
@@ -27,9 +36,6 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/game.html");
 });
 
-const startX = 800 / 2;
-const startY = 520 / 2;
-
 class Player {
   constructor(socket) {
     this.socket = socket;
@@ -42,10 +48,6 @@ class Player {
     return this.socket.id;
   }
 }
-
-var players = [];
-var playerMap = {};
-var isRed = true;
 
 joinGame = (socket) => {
   let player = new Player(socket);
@@ -85,6 +87,10 @@ io.on("connection", (socket) => {
       console.log(`${socket.id}님 ${reason}때문에 퇴장`);
       endGame(socket);
       socket.broadcast.emit("leave_user", socket.id);
+      if (players.length == 0) {
+        isStart = false;
+        isFailed = false;
+      }
     });
 
     let newPlayer = joinGame(socket);
@@ -106,6 +112,15 @@ io.on("connection", (socket) => {
       y: newPlayer.y,
       color: newPlayer.color,
     });
+
+    if (players.length > 2 || isFailed) {
+      console.log(socket.id);
+      socket.emit("force_disconnect", socket.id);
+      endGame(socket);
+      socket.broadcast.emit("leave_user", socket.id);
+      socket.disconnect(false);
+      isFailed = false;
+    }
 
     socket.on("send_location", (data) => {
       socket.broadcast.emit("update_state", {
