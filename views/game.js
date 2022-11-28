@@ -124,6 +124,7 @@ socket.on("update_collider", (data) => {
     if (players[i].id == data.id) {
       players[i].setHp(data.hp - 1);
       bullets.splice(data.bullet_id, 1);
+      break;
     }
   }
 });
