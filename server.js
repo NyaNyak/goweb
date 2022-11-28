@@ -172,13 +172,11 @@ io.on("connection", (socket) => {
     });
 
     socket.on("send_bullet", (data) => {
-      console.log(data);
       io.sockets.emit("update_bullet", {
         dir: data.dir,
         x: data.x,
         y: data.y,
       });
-      console.log("send");
     });
   }
 });
