@@ -18,71 +18,8 @@ let myId;
 
 let bullets = [];
 
-function Player(id, color) {
-  this.id = id;
-  this.x = 800 / 2;
-  this.y = 520 / 2;
-  this.img = new Image();
-  this.dir = "right";
-  if (color == "blue") {
-    this.dir = "left";
-  }
-  setImage(this.img, color, this.dir);
-  //setImage(this.color);
-}
-
-class Bullet {
-  constructor(dir, x, y) {
-    this.x = x;
-    this.y = y + 32;
-    this.dir = dir;
-    this.radius = 4;
-  }
-  bulletUpdate(dir) {
-    if (dir == "left") {
-      this.x -= 3.5;
-    } else {
-      this.x += 3.5;
-    }
-  }
-  getX() {
-    return this.x;
-  }
-  setX(x) {
-    this.x = x;
-  }
-  getY() {
-    return this.y;
-  }
-  setY(y) {
-    this.y = y;
-  }
-  getDir() {
-    return this.dir;
-  }
-  setDir(dir) {
-    this.dir = dir;
-  }
-  getRadius() {
-    return this.radius;
-  }
-  setRadius() {
-    this.radius = radius;
-  }
-}
-
-function setImage(img, color, dir) {
-  if (color == "red") {
-    if (dir == "left") img.src = "/resource/player1_left.png";
-    else img.src = "/resource/player1_right.png";
-  } else {
-    if (dir == "left") img.src = "/resource/player2_left.png";
-    else img.src = "/resource/player2_right.png";
-  }
-}
-
-function createBullet(dir, x, y) {
-  let b = new Bullet(dir, x, y);
+function createBullet(id, dir, x, y) {
+  let b = new Bullet(id, dir, x, y);
   if (b.dir == "left") {
     b.setX(x - 10);
   } else if (b.dir == "right") {
@@ -177,7 +114,7 @@ socket.on("update_state", (data) => {
   updateState(data.id, data.x, data.y, data.dir);
 });
 socket.on("update_bullet", (data) => {
-  createBullet(data.dir, data.x, data.y);
+  createBullet(data.id, data.dir, data.x, data.y);
 });
 
 sendData = () => {
@@ -194,6 +131,7 @@ sendData = () => {
 sendBullet = () => {
   let curPlayer = playerMap[myId];
   let data = {
+    id: curPlayer.id,
     x: curPlayer.x,
     y: curPlayer.y,
     dir: curPlayer.dir,
@@ -204,7 +142,7 @@ sendBullet = () => {
 renderPlayer = () => {
   for (let i = 0; i < players.length; i++) {
     let player = players[i];
-    setImage(player.img, player.color, player.dir);
+    player.setImage(player.img, player.color, player.dir);
 
     ctx.drawImage(player.img, player.x, player.y, 60, 60);
 
