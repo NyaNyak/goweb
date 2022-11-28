@@ -176,10 +176,10 @@ collider = () => {
         sendCollider(bullet.id);
         if (bullets[i].dir == "right") {
           curPlayer.x += 20;
-          curPlayer.y -= 10;
+          //curPlayer.y -= 10;
         } else {
           curPlayer.x -= 20;
-          curPlayer.y -= 10;
+          //curPlayer.y -= 10;
         }
         damage.load();
         damage.volume = 1;
@@ -216,8 +216,8 @@ renderPlayer = () => {
 
   let curPlayer = playerMap[myId];
   const minX = 5;
-  const minY = 5;
-  const maxX = canvas.width - 60;
+  const minY = 35;
+  const maxX = canvas.width - 70;
   const maxY = canvas.height - 85;
 
   if (rightPressed) {
