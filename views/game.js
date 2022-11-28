@@ -177,6 +177,10 @@ socket.on("leave_user", (data) => {
 socket.on("update_state", (data) => {
   updateState(data.id, data.x, data.y, data.dir);
 });
+socket.on("update_bullet", (data) => {
+  console.log(data);
+  createBullet(data.dir, data.x, data.y);
+});
 
 sendData = () => {
   let curPlayer = playerMap[myId];
@@ -187,6 +191,16 @@ sendData = () => {
     dir: curPlayer.dir,
   };
   if (data) socket.emit("send_location", data);
+};
+
+sendBullet = () => {
+  let curPlayer = playerMap[myId];
+  let data = {
+    x: curPlayer.x,
+    y: curPlayer.y,
+    dir: curPlayer.dir,
+  };
+  if (data) socket.emit("send_bullet", data);
 };
 
 renderPlayer = () => {
@@ -241,7 +255,7 @@ renderPlayer = () => {
     }
   }
   if (spacePressed) {
-    createBullet(curPlayer.dir, curPlayer.x, curPlayer.y);
+    sendBullet();
     effect.load();
     effect.loop = false;
     effect.play();
@@ -259,6 +273,9 @@ renderBullet = () => {
     ctx.closePath();
 
     bullet.bulletUpdate(bullet.dir);
+    if (bullet.getX() < 0 || bullet.getX() > 800) {
+      bullets.splice(i, 1);
+    }
   }
 };
 

@@ -9,6 +9,9 @@ const startY = 520 / 2;
 
 let players = [];
 let playerMap = {};
+
+let bullets = [];
+
 let isRed = true;
 let isFailed = false;
 let isStart = false;
@@ -49,6 +52,40 @@ class Player {
 
   get id() {
     return this.socket.id;
+  }
+}
+
+class Bullet {
+  constructor(dir, x, y) {
+    this.x = x;
+    this.y = y + 32;
+    this.dir = dir;
+    this.radius = 4;
+  }
+
+  getX() {
+    return this.x;
+  }
+  setX(x) {
+    this.x = x;
+  }
+  getY() {
+    return this.y;
+  }
+  setY(y) {
+    this.y = y;
+  }
+  getDir() {
+    return this.dir;
+  }
+  setDir(dir) {
+    this.dir = dir;
+  }
+  getRadius() {
+    return this.radius;
+  }
+  setRadius() {
+    this.radius = radius;
   }
 }
 
@@ -132,6 +169,16 @@ io.on("connection", (socket) => {
         y: data.y,
         dir: data.dir,
       });
+    });
+
+    socket.on("send_bullet", (data) => {
+      console.log(data);
+      io.sockets.emit("update_bullet", {
+        dir: data.dir,
+        x: data.x,
+        y: data.y,
+      });
+      console.log("send");
     });
   }
 });
