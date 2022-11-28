@@ -176,10 +176,10 @@ collider = () => {
       if (bullet.id != curPlayer.id) {
         sendCollider(bullet.id);
         if (bullets[i].dir == "right") {
-          curPlayer.x += 20;
+          curPlayer.x += 2;
           //curPlayer.y -= 10;
         } else {
-          curPlayer.x -= 20;
+          curPlayer.x -= 2;
           //curPlayer.y -= 10;
         }
         damage.load();
