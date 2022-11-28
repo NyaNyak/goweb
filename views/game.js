@@ -37,7 +37,6 @@ class Bullet {
     this.y = y + 32;
     this.dir = dir;
     this.radius = 4;
-    bullets.push(this);
   }
   bulletUpdate(dir) {
     if (dir == "left") {
@@ -85,10 +84,11 @@ function setImage(img, color, dir) {
 function createBullet(dir, x, y) {
   let b = new Bullet(dir, x, y);
   if (b.dir == "left") {
-    b.setX(x);
+    b.setX(x - 10);
   } else if (b.dir == "right") {
-    b.setX(x + 60);
+    b.setX(x + 70);
   }
+  bullets.push(b);
 }
 
 keyDownHandler = (e) => {
