@@ -122,7 +122,7 @@ socket.on("update_bullet", (data) => {
 socket.on("update_collider", (data) => {
   for (let i = 0; i < players.length; i++) {
     if (players[i].id == data.id) {
-      players[i].setHp(data.hp - 5);
+      players[i].setHp(data.hp - 1);
       bullets.splice(data.bullet_id, 1);
     }
   }
