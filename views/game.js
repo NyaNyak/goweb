@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 const myAudio = document.getElementById("bgm");
 const effect = new Audio("./resource/gunfire.mp3");
 
-let playerSpeed = 3;
+let playerSpeed = 2;
 
 let rightPressed = false;
 let leftPressed = false;
@@ -41,9 +41,9 @@ class Bullet {
   }
   bulletUpdate(dir) {
     if (dir == "left") {
-      this.x -= 5;
+      this.x -= 3.5;
     } else {
-      this.x += 5;
+      this.x += 3.5;
     }
   }
   getX() {
@@ -83,7 +83,6 @@ function setImage(img, color, dir) {
 }
 
 function createBullet(dir, x, y) {
-  console.log("총알 생성");
   let b = new Bullet(dir, x, y);
   if (b.dir == "left") {
     b.setX(x);
@@ -178,7 +177,6 @@ socket.on("update_state", (data) => {
   updateState(data.id, data.x, data.y, data.dir);
 });
 socket.on("update_bullet", (data) => {
-  console.log(data);
   createBullet(data.dir, data.x, data.y);
 });
 
