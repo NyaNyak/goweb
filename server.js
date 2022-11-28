@@ -169,6 +169,7 @@ io.on("connection", (socket) => {
 
   socket.on("send_bullet", (data) => {
     io.sockets.emit("update_bullet", {
+      id: data.id,
       dir: data.dir,
       x: data.x,
       y: data.y,
