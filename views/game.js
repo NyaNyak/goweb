@@ -172,17 +172,19 @@ collider = () => {
       ) <=
       bullet.getRadius() + 30
     ) {
-      sendCollider(bullet.id);
-      if (bullets[i].dir == "right") {
-        curPlayer.x += 20;
-        curPlayer.y -= 10;
-      } else {
-        curPlayer.x -= 20;
-        curPlayer.y -= 10;
+      if (bullet.id != curPlayer.id) {
+        sendCollider(bullet.id);
+        if (bullets[i].dir == "right") {
+          curPlayer.x += 20;
+          curPlayer.y -= 10;
+        } else {
+          curPlayer.x -= 20;
+          curPlayer.y -= 10;
+        }
+        damage.load();
+        damage.volume = 1;
+        damage.play();
       }
-      damage.load();
-      damage.volume = 1;
-      damage.play();
     }
   }
 };
