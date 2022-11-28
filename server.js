@@ -117,66 +117,61 @@ endGame = (socket) => {
   delete playerMap[socket.id];
 };
 
-if (players.length < 2) {
-}
-
 io.on("connection", (socket) => {
-  if (players.length < 2) {
-    console.log(`${socket.id}님 입장`);
-    socket.on("disconnect", (reason) => {
-      console.log(`${socket.id}님 ${reason}때문에 퇴장`);
-      endGame(socket);
-      socket.broadcast.emit("leave_user", socket.id);
-      if (players.length == 0) {
-        isStart = false;
-        isFailed = false;
-      }
-    });
-
-    let newPlayer = joinGame(socket);
-    socket.emit("user_id", socket.id);
-
-    for (let i = 0; i < players.length; i++) {
-      let player = players[i];
-      socket.emit("join_user", {
-        id: player.id,
-        x: player.x,
-        y: player.y,
-        color: player.color,
-      });
-    }
-
-    socket.broadcast.emit("join_user", {
-      id: socket.id,
-      x: newPlayer.x,
-      y: newPlayer.y,
-      color: newPlayer.color,
-    });
-
-    if (players.length > 2 || isFailed) {
-      console.log(socket.id);
-      socket.emit("force_disconnect", socket.id);
-      endGame(socket);
-      socket.broadcast.emit("leave_user", socket.id);
-      socket.disconnect(false);
+  console.log(`${socket.id}님 입장`);
+  socket.on("disconnect", (reason) => {
+    console.log(`${socket.id}님 ${reason}때문에 퇴장`);
+    endGame(socket);
+    socket.broadcast.emit("leave_user", socket.id);
+    if (players.length == 0) {
+      isStart = false;
       isFailed = false;
     }
+  });
 
-    socket.on("send_location", (data) => {
-      socket.broadcast.emit("update_state", {
-        id: data.id,
-        x: data.x,
-        y: data.y,
-        dir: data.dir,
-      });
-    });
+  let newPlayer = joinGame(socket);
+  socket.emit("user_id", socket.id);
 
-    socket.on("send_bullet", (data) => {
-      io.sockets.emit("update_bullet", {
-        dir: data.dir,
-        x: data.x,
-        y: data.y,
-      });
+  for (let i = 0; i < players.length; i++) {
+    let player = players[i];
+    socket.emit("join_user", {
+      id: player.id,
+      x: player.x,
+      y: player.y,
+      color: player.color,
     });
   }
+
+  socket.broadcast.emit("join_user", {
+    id: socket.id,
+    x: newPlayer.x,
+    y: newPlayer.y,
+    color: newPlayer.color,
+  });
+
+  if (players.length > 2 || isFailed) {
+    console.log(socket.id);
+    socket.emit("force_disconnect", socket.id);
+    endGame(socket);
+    socket.broadcast.emit("leave_user", socket.id);
+    socket.disconnect(false);
+    isFailed = false;
+  }
+
+  socket.on("send_location", (data) => {
+    socket.broadcast.emit("update_state", {
+      id: data.id,
+      x: data.x,
+      y: data.y,
+      dir: data.dir,
+    });
+  });
+
+  socket.on("send_bullet", (data) => {
+    io.sockets.emit("update_bullet", {
+      dir: data.dir,
+      x: data.x,
+      y: data.y,
+    });
+  });
 });
