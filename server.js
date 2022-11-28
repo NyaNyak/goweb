@@ -41,6 +41,7 @@ class Player {
     this.socket = socket;
     this.x = startX;
     this.y = startY;
+    this.dir = "right";
     this.color = "red";
   }
 
@@ -127,6 +128,7 @@ io.on("connection", (socket) => {
         id: data.id,
         x: data.x,
         y: data.y,
+        dir: data.dir,
       });
     });
   }

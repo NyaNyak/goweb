@@ -153,13 +153,14 @@ leaveUser = (id) => {
   delete playerMap[id];
 };
 
-updateState = (id, x, y) => {
+updateState = (id, x, y, dir) => {
   let player = playerMap[id];
   if (!player) {
     return;
   }
   player.x = x;
   player.y = y;
+  player.dir = dir;
 };
 
 let socket = io();
@@ -174,7 +175,7 @@ socket.on("leave_user", (data) => {
   leaveUser(data);
 });
 socket.on("update_state", (data) => {
-  updateState(data.id, data.x, data.y);
+  updateState(data.id, data.x, data.y, data.dir);
 });
 
 sendData = () => {
@@ -183,6 +184,7 @@ sendData = () => {
     id: curPlayer.id,
     x: curPlayer.x,
     y: curPlayer.y,
+    dir: curPlayer.dir,
   };
   if (data) socket.emit("send_location", data);
 };
