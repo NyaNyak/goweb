@@ -13,17 +13,19 @@
   </head>
 
   <body>
-    <div id="background">
-      <img src="./resource/background.png" width="800" height="220" />
+    <div id="container">
+      <div id="background">
+        <img src="./resource/background.png" width="800" height="220" />
+      </div>
+      <div id="startBtn">
+        <button type="button"><img src="./resource/start_button.png" /></button>
+      </div>
+      <div id="canvas">
+        <canvas id="myCanvas" width="800" height="500"></canvas>
+      </div>
+      <audio controls id="bgm" hidden="true">
+        <source src="./resource/lost_saga.mp3" type="audio/mp3" />
+      </audio>
     </div>
-    <div id="startBtn">
-      <button type="button"><img src="./resource/start_button.png" /></button>
-    </div>
-    <div id="canvas">
-      <canvas id="myCanvas" width="800" height="500"></canvas>
-    </div>
-    <audio controls id="bgm" hidden="true">
-      <source src="./resource/lost_saga.mp3" type="audio/mp3" />
-    </audio>
   </body>
 </html>
