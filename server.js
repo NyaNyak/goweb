@@ -184,6 +184,7 @@ io.on("connection", (socket) => {
   socket.on("collision_detect", (data) => {
     io.sockets.emit("update_collider", {
       id: data.id,
+      hp: data.hp,
       bullet_id: data.bullet_id,
     });
   });

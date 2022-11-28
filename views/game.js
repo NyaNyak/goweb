@@ -122,7 +122,7 @@ socket.on("update_bullet", (data) => {
 socket.on("update_collider", (data) => {
   for (let i = 0; i < players.length; i++) {
     if (players[i].id == data.id) {
-      players[i].subHp(5);
+      players[i].setHp(data.hp - 5);
       bullets.splice(data.bullet_id, 1);
     }
   }
@@ -156,6 +156,7 @@ sendCollider = (bullet_id) => {
   let curPlayer = playerMap[myId];
   let data = {
     id: curPlayer.id,
+    hp: curPlayer.hp,
     bullet_id: bullet_id,
   };
   if (data) socket.emit("collision_detect", data);
