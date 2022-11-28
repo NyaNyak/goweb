@@ -22,11 +22,12 @@ class Player {
 }
 
 class Bullet {
-  constructor(id, dir, x, y) {
+  constructor(id, dir, x, y, color) {
     this.id = id;
     this.x = x;
     this.y = y + 32;
     this.dir = dir;
+    this.color = color;
     this.radius = 4;
   }
   bulletUpdate(dir) {
@@ -62,5 +63,8 @@ class Bullet {
   }
   setRadius() {
     this.radius = radius;
+  }
+  getColor() {
+    return this.color;
   }
 }

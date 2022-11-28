@@ -173,6 +173,7 @@ io.on("connection", (socket) => {
       dir: data.dir,
       x: data.x,
       y: data.y,
+      color: data.color,
     });
   });
 });

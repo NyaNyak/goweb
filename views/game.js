@@ -18,8 +18,8 @@ let myId;
 
 let bullets = [];
 
-function createBullet(id, dir, x, y) {
-  let b = new Bullet(id, dir, x, y);
+function createBullet(id, dir, x, y, color) {
+  let b = new Bullet(id, dir, x, y, color);
   if (b.dir == "left") {
     b.setX(x - 10);
   } else if (b.dir == "right") {
@@ -114,7 +114,7 @@ socket.on("update_state", (data) => {
   updateState(data.id, data.x, data.y, data.dir);
 });
 socket.on("update_bullet", (data) => {
-  createBullet(data.id, data.dir, data.x, data.y);
+  createBullet(data.id, data.dir, data.x, data.y, data.color);
 });
 
 sendData = () => {
@@ -135,6 +135,7 @@ sendBullet = () => {
     x: curPlayer.x,
     y: curPlayer.y,
     dir: curPlayer.dir,
+    color: curPlayer.color,
   };
   if (data) socket.emit("send_bullet", data);
 };
@@ -148,6 +149,7 @@ renderPlayer = () => {
 
     ctx.beginPath();
     ctx.font = "15px Arial";
+    ctx.fillStyle = "black";
     ctx.fillText(`player ${player.color}`, player.x, player.y + 80);
     ctx.closePath();
   }
@@ -203,7 +205,8 @@ renderBullet = () => {
   for (let i = 0; i < bullets.length; i++) {
     let bullet = bullets[i];
     ctx.beginPath();
-    ctx.fillStyle = "black";
+    ctx.fillStyle = bullet.getColor();
+    console.log(bullet.getColor());
     ctx.arc(bullet.x, bullet.y, bullet.getRadius(), 0, Math.PI * 2, false);
     ctx.fill();
     ctx.closePath();
