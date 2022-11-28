@@ -46,6 +46,7 @@ class Player {
     this.socket = socket;
     this.x = startX;
     this.y = startY;
+    this.hp = 100;
     this.dir = "right";
     this.color = "red";
   }
@@ -138,6 +139,7 @@ io.on("connection", (socket) => {
       id: player.id,
       x: player.x,
       y: player.y,
+      hp: player.hp,
       color: player.color,
     });
   }
@@ -146,6 +148,7 @@ io.on("connection", (socket) => {
     id: socket.id,
     x: newPlayer.x,
     y: newPlayer.y,
+    hp: newPlayer.hp,
     color: newPlayer.color,
   });
 
@@ -163,6 +166,7 @@ io.on("connection", (socket) => {
       id: data.id,
       x: data.x,
       y: data.y,
+      hp: data.hp,
       dir: data.dir,
     });
   });
@@ -174,6 +178,13 @@ io.on("connection", (socket) => {
       x: data.x,
       y: data.y,
       color: data.color,
+    });
+  });
+
+  socket.on("collision_detect", (data) => {
+    io.sockets.emit("update_collider", {
+      id: data.id,
+      bullet_id: data.bullet_id,
     });
   });
 });

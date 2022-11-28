@@ -3,12 +3,28 @@ class Player {
     this.id = id;
     this.x = 800 / 2;
     this.y = 520 / 2;
+    this.hp = 100;
     this.img = new Image();
     this.color = color;
     this.dir = "right";
     if (this.color == "blue") {
       this.dir = "left";
     }
+  }
+  getX() {
+    return this.x;
+  }
+  getY() {
+    return this.y;
+  }
+  getHp() {
+    return this.hp;
+  }
+  subHp(a) {
+    this.hp -= a;
+  }
+  setHp(hp) {
+    this.hp = hp;
   }
   setImage(img, color, dir) {
     if (color == "red") {
