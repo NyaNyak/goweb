@@ -194,8 +194,16 @@ collider = () => {
 renderPlayer = () => {
   for (let i = 0; i < players.length; i++) {
     let player = players[i];
+    ctx.beginPath();
     player.setImage(player.img, player.color, player.dir);
     ctx.drawImage(player.img, player.x, player.y, 60, 60);
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.font = "bold 30px Arial";
+    ctx.fillStyle = "#4C4C4C";
+    ctx.fillRect(player.getX() - 5, player.getY() - 20, (100 / 4) * 3, 10);
+    ctx.closePath();
 
     ctx.beginPath();
     ctx.font = "bold 30px Arial";
@@ -206,7 +214,12 @@ renderPlayer = () => {
     } else {
       ctx.fillStyle = "red";
     }
-    ctx.fillText(`${player.getHp()}`, player.getX() + 10, player.getY() - 10);
+    ctx.fillRect(
+      player.getX() - 5,
+      player.getY() - 20,
+      (player.getHp() / 4) * 3,
+      10
+    );
     ctx.closePath();
 
     ctx.beginPath();
@@ -218,7 +231,7 @@ renderPlayer = () => {
 
   let curPlayer = playerMap[myId];
   const minX = 5;
-  const minY = 35;
+  const minY = 20;
   const maxX = canvas.width - 70;
   const maxY = canvas.height - 85;
 
