@@ -1,7 +1,14 @@
+const lobby = document.getElementById("lobbyBgm");
+
+window.onpageshow = function (event) {
+  lobby.load();
+  lobby.volume = "0.3";
+  lobby.loop = true;
+  lobby.play();
+};
+
 enterGame = () => {
-  // submit 후 새로고침 막기
-  // 이거 없으면 새로고침돼서 소켓에 도달조차 안되네
-  event.preventDefault();
+  lobby.pause();
   let nickname = document.getElementById("inputName").value;
   let room = document.getElementById("inputRoom").value;
 
