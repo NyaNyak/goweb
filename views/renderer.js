@@ -73,6 +73,8 @@ renderPlayer = () => {
       gunfire.loop = false;
       gunfire.volume = 0.3;
       gunfire.play();
+    } else {
+      reloadPressed = true;
     }
     spacePressed = false;
   }
