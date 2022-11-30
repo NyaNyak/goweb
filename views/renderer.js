@@ -69,20 +69,22 @@ renderPlayer = () => {
     }
   }
   if (spacePressed) {
-    if (curPlayer.bulletNum >= 1) {
+    if (curPlayer.bulletNum > 0) {
+      console.log(curPlayer.bulletNum);
       sendBullet();
-      if (curPlayer.bulletNum == 1) {
-        reloadPressed = true;
-      }
+      console.log(curPlayer.bulletNum);
       gunfire.load();
       gunfire.loop = false;
       gunfire.volume = 0.3;
       gunfire.play();
     }
+    if (!curPlayer.bulletNum) {
+      reloadPressed = true;
+    }
     spacePressed = false;
   }
   if (reloadPressed) {
-    if (curPlayer.bulletNum == 1) {
+    if (!curPlayer.bulletNum) {
       if (onReload == false) {
         onReload = true;
         reload.load();

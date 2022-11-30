@@ -151,7 +151,7 @@ socket.on("update_state", (data) => {
 });
 socket.on("update_bullet", (data) => {
   for (let i = 0; i < players.length; i++) {
-    if (players[i].id == data.id && players[i].getBulletNum()) {
+    if (players[i].id == data.id && players[i].getBulletNum() >= 0) {
       createBullet(data.id, data.dir, data.x, data.y, data.color);
       break;
     }
