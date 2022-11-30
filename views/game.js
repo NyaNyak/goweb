@@ -54,7 +54,7 @@ keyDownHandler = (e) => {
   if (e.keyCode == 32) {
     spacePressed = false;
   }
-  if (e.code == "R") {
+  if (e.code == 82) {
     reloadPressed = false;
   }
 };

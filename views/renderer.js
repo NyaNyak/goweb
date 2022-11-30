@@ -1,3 +1,5 @@
+var onReload = false;
+
 renderPlayer = () => {
   for (let i = 0; i < players.length; i++) {
     let player = players[i];
@@ -80,15 +82,19 @@ renderPlayer = () => {
   }
   if (reloadPressed) {
     if (curPlayer.bulletNum == 0) {
-      reload.load();
-      reload.loop = false;
-      reload.volume = 1;
-      reload.play();
-      setTimeout(function () {
-        curPlayer.bulletNum = 6;
-      }, 3000);
-      reloadPressed = false;
+      if (onReload == false) {
+        onReload = true;
+        reload.load();
+        reload.loop = false;
+        reload.volume = 1;
+        reload.play();
+        setTimeout(function () {
+          curPlayer.bulletNum = 6;
+          onReload = false;
+        }, 3000);
+      }
     }
+    reloadPressed = false;
   }
 };
 
