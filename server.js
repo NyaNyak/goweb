@@ -53,6 +53,10 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/game.html");
 });
 
+app.get("/lobby", (req, res) => {
+  res.sendFile(__dirname + "/views/gameLobby.html");
+});
+
 class Player {
   constructor(socket) {
     this.socket = socket;

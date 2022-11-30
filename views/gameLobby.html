@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Western Gunslingers</title>
+
+    <link rel="stylesheet" href="gameLobby.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="game.js" defer></script>
+    <script src="gameLobby.js" defer></script>
+    <script src="renderer.js" defer></script>
+    <script src="objects.js" defer></script>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="title1">Western</div>
+      <hr />
+      <div id="title2">Gunslingers</div>
+      <hr />
+      <div id="frame">
+        <img
+          id="thumb"
+          src="./resource/thumbnail.png"
+          width="200"
+          height="150"
+        />
+      </div>
+      <div id="keys">
+        <img
+          id="arrow"
+          src="./resource/arrowkeys.png"
+          width="100"
+          height="60"
+        />
+        <img id="space" src="./resource/spacebar.png" width="100" height="30" />
+      </div>
+      <div id="manual">
+        <span id="move">move</span>
+        <span id="shoot">shoot</span>
+      </div>
+      <input
+        type="text"
+        id="inputName"
+        placeholder="Your Name"
+        maxlength="10"
+      />
+      <div id="startBtn">
+        <button type="button" onclick="enterGame()">
+          <img
+            id="btnImage"
+            src="./resource/start_button.png"
+            width="270"
+            height="66"
+          />
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
