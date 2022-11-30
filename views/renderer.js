@@ -70,9 +70,7 @@ renderPlayer = () => {
   }
   if (spacePressed) {
     if (curPlayer.bulletNum > 0) {
-      console.log(curPlayer.bulletNum);
       sendBullet();
-      console.log(curPlayer.bulletNum);
       gunfire.load();
       gunfire.loop = false;
       gunfire.volume = 0.3;
