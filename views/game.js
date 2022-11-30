@@ -161,15 +161,12 @@ socket.on("update_collider", (data) => {
   // 여기서 받는 data.id는 맞은 유저 id
   for (let i = 0; i < players.length; i++) {
     // 맞은 유저의 피 1 감소
-    if (players[i].id == data.id) {
-      players[i].setHp(data.hp - 1);
+    if (players[i].id != data.id) {
     } // 반대편 유저는 맞춘 총알을 렌더링에서 빼기
-    else {
-      for (let j = 0; j < bullets.length; j++) {
-        if (bullets[j].key == data.key) {
-          bullets.splice(j, 1);
-          break;
-        }
+    for (let j = 0; j < bullets.length; j++) {
+      if (bullets[j].key == data.key) {
+        bullets.splice(j, 1);
+        break;
       }
     }
   }
@@ -231,6 +228,7 @@ collider = () => {
           (curPlayer.getY() + 30 - bullet.getY()) ** 2 <=
         bullet.getRadius() + 30
       ) {
+        curPlayer.hp -= 1;
         sendCollider(bullet.key);
         if (bullet.dir == "right") {
           curPlayer.x += 2;
@@ -263,4 +261,4 @@ update = () => {
   renderGame();
 };
 //renderPlayer();
-setInterval(update, 5);
+setInterval(update, 10);
