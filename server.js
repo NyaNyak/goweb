@@ -16,6 +16,16 @@ let isRed = true;
 let isFailed = false;
 let isStart = false;
 
+// 임시로 서버 시간 구현
+
+function TimeCheck(socket) {
+  let data = {
+    time: key++,
+  };
+  socket.emit("timer", data);
+  setTimeout(TimeCheck, 1000, socket);
+}
+
 /*
 handler = (req, res) => {
   fs.readFile(__dirname + "/views/index.html", (err, data) => {
