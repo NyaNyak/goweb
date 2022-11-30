@@ -62,8 +62,9 @@ class Player {
 }
 
 class Bullet {
-  constructor(id, dir, x, y, color) {
+  constructor(id, key, dir, x, y, color) {
     this.id = id;
+    this.key = key;
     this.x = x;
     this.y = y + 32;
     this.dir = dir;
@@ -76,6 +77,9 @@ class Bullet {
     } else {
       this.x += 8;
     }
+  }
+  getKey() {
+    return this.key;
   }
   getId() {
     return this.id;

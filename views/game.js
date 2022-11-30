@@ -19,8 +19,8 @@ let myId;
 
 let bullets = [];
 
-function createBullet(id, dir, x, y, color) {
-  let b = new Bullet(id, dir, x, y, color);
+function createBullet(id, key, dir, x, y, color) {
+  let b = new Bullet(id, key, dir, x, y, color);
   //let c = new Bullet(id, dir, x, y, color);
   if (b.dir == "left") {
     b.setX(x - 10);
@@ -152,7 +152,7 @@ socket.on("update_state", (data) => {
 socket.on("update_bullet", (data) => {
   for (let i = 0; i < players.length; i++) {
     if (players[i].id == data.id) {
-      createBullet(data.id, data.dir, data.x, data.y, data.color);
+      createBullet(data.id, data.key, data.dir, data.x, data.y, data.color);
       break;
     }
   }
@@ -161,7 +161,12 @@ socket.on("update_collider", (data) => {
   for (let i = 0; i < players.length; i++) {
     if (players[i].id == data.id) {
       players[i].setHp(data.hp - 1);
-      bullets.splice(data.bullet_id, 1);
+      for (let j = 0; j < bullets.length; j++) {
+        if (bullets[j].key == data.key) {
+          bullets.splice(j, 1);
+          break;
+        }
+      }
       break;
     }
   }
@@ -195,12 +200,12 @@ sendBullet = () => {
   if (data) socket.emit("send_bullet", data);
 };
 
-sendCollider = (bullet_id) => {
+sendCollider = (bullet_key) => {
   let curPlayer = playerMap[myId];
   let data = {
     id: curPlayer.id,
     hp: curPlayer.hp,
-    bullet_id: bullet_id,
+    key: bullet_key,
   };
   if (data) socket.emit("collision_detect", data);
 };
@@ -209,27 +214,24 @@ collider = () => {
   let curPlayer = playerMap[myId];
   for (let i = 0; i < bullets.length; i++) {
     let bullet = bullets[i];
-    if (
-      Math.sqrt(
-        (curPlayer.getX() + 30 - bullets[i].getX()) ** 2 +
-          (curPlayer.getY() + 30 - bullets[i].getY()) ** 2
-      ) <=
-      bullet.getRadius() + 30
-    ) {
-      if (bullet.id != curPlayer.id) {
-        sendCollider(bullet.id);
-        if (bullets[i].dir == "right") {
+    if (bullet.id != curPlayer.id) {
+      if (
+        Math.sqrt(curPlayer.getX() + 30 - bullet.getX()) ** 2 +
+          (curPlayer.getY() + 30 - bullet.getY()) ** 2 <=
+        bullet.getRadius() + 30
+      ) {
+        sendCollider(bullet.key);
+        if (bullet.dir == "right") {
           curPlayer.x += 2;
-          //curPlayer.y -= 10;
         } else {
           curPlayer.x -= 2;
-          //curPlayer.y -= 10;
         }
         damage.load();
         damage.volume = 0.7;
         damage.play();
       }
     }
+    break;
   }
 };
 

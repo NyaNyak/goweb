@@ -16,6 +16,8 @@ let isRed = true;
 let isFailed = false;
 let isStart = false;
 
+let bulletKey = 0;
+
 // 임시로 서버 시간 구현
 
 function TimeCheck(socket) {
@@ -196,6 +198,7 @@ io.on("connection", (socket) => {
   socket.on("send_bullet", (data) => {
     io.sockets.emit("update_bullet", {
       id: data.id,
+      key: bulletKey++,
       dir: data.dir,
       x: data.x,
       y: data.y,
@@ -207,7 +210,7 @@ io.on("connection", (socket) => {
     io.sockets.emit("update_collider", {
       id: data.id,
       hp: data.hp,
-      bullet_id: data.bullet_id,
+      key: data.key,
     });
   });
 });
