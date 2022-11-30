@@ -34,7 +34,7 @@ renderPlayer = () => {
   const minX = 5;
   const minY = 20;
   const maxX = canvas.width - 70;
-  const maxY = canvas.height - 110;
+  const maxY = canvas.height - 130;
 
   if (rightPressed) {
     if (curPlayer.x >= maxX) {
