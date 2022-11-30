@@ -207,6 +207,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("collision_detect", (data) => {
+    // 이 id는 맞은 유저 id
     io.sockets.emit("update_collider", {
       id: data.id,
       hp: data.hp,

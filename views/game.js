@@ -158,16 +158,19 @@ socket.on("update_bullet", (data) => {
   }
 });
 socket.on("update_collider", (data) => {
+  // 여기서 받는 data.id는 맞은 유저 id
   for (let i = 0; i < players.length; i++) {
+    // 맞은 유저의 피 1 감소
     if (players[i].id == data.id) {
       players[i].setHp(data.hp - 1);
+    } // 반대편 유저는 맞춘 총알을 렌더링에서 빼기
+    else {
       for (let j = 0; j < bullets.length; j++) {
         if (bullets[j].key == data.key) {
           bullets.splice(j, 1);
           break;
         }
       }
-      break;
     }
   }
 });
@@ -201,7 +204,14 @@ sendBullet = () => {
 };
 
 sendCollider = (bullet_key) => {
+  for (let i = 0; i < bullets.length; i++) {
+    if (bullets[i].key == bullet_key) {
+      bullets.splice(i, 1);
+      break;
+    }
+  }
   let curPlayer = playerMap[myId];
+  // 내가 맞았을 때, 내 아이디 전송
   let data = {
     id: curPlayer.id,
     hp: curPlayer.hp,
@@ -214,6 +224,7 @@ collider = () => {
   let curPlayer = playerMap[myId];
   for (let i = 0; i < bullets.length; i++) {
     let bullet = bullets[i];
+    // 내가 상대가 쏜 총알에 맞았을 때
     if (bullet.id != curPlayer.id) {
       if (
         Math.sqrt(curPlayer.getX() + 30 - bullet.getX()) ** 2 +
