@@ -77,8 +77,8 @@ keyUpHandler = (e) => {
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
-joinUser = (id, x, y, hp, attack, speed, bulletNum, color) => {
-  let player = new Player(id, color);
+joinUser = (id, x, y, hp, attack, speed, bulletNum, color, name) => {
+  let player = new Player(id, color, name);
   player.x = x;
   player.y = y;
   player.hp = hp;
@@ -86,6 +86,7 @@ joinUser = (id, x, y, hp, attack, speed, bulletNum, color) => {
   player.speed = speed;
   player.bulletNum = bulletNum;
   player.color = color;
+  player.name = name;
 
   players.push(player);
   playerMap[id] = player;
@@ -131,7 +132,8 @@ socket.on("join_user", (data) => {
     data.attack,
     data.speed,
     data.bulletNum,
-    data.color
+    data.color,
+    data.name
   );
 });
 socket.on("leave_user", (data) => {

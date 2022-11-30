@@ -1,5 +1,5 @@
 class Player {
-  constructor(id, color) {
+  constructor(id, color, name) {
     this.id = id;
     this.x = 800 / 2;
     this.y = 520 / 2;
@@ -13,6 +13,7 @@ class Player {
     if (this.color == "blue") {
       this.dir = "left";
     }
+    this.name = name;
   }
   getX() {
     return this.x;

@@ -7,6 +7,10 @@ const io = require("socket.io")(server);
 const startX = 800 / 2;
 const startY = 520 / 2;
 
+var query = "";
+
+let rooms = [];
+
 let players = [];
 let playerMap = {};
 
@@ -19,7 +23,6 @@ let isStart = false;
 let bulletKey = 0;
 
 // 임시로 서버 시간 구현
-
 function TimeCheck(socket) {
   let data = {
     time: key++,
@@ -50,11 +53,17 @@ server.listen(port, () => {
 app.use(express.static("views"));
 
 app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/views/gameLobby.html");
+});
+
+app.get("/game", (req, res) => {
   res.sendFile(__dirname + "/views/game.html");
 });
 
-app.get("/lobby", (req, res) => {
-  res.sendFile(__dirname + "/views/gameLobby.html");
+app.get("/room", (req, res) => {
+  query = req.query;
+  console.log(query);
+  res.sendFile(__dirname + "/views/game.html");
 });
 
 class Player {
@@ -68,6 +77,7 @@ class Player {
     this.bulletNum = 6;
     this.dir = "right";
     this.color = "red";
+    this.name = query.name;
   }
 
   get id() {
@@ -163,6 +173,7 @@ io.on("connection", (socket) => {
       speed: player.speed,
       bulletNum: player.bulletNum,
       color: player.color,
+      name: player.name,
     });
   }
 
@@ -217,5 +228,10 @@ io.on("connection", (socket) => {
       hp: data.hp,
       key: data.key,
     });
+  });
+
+  socket.on("enterGame", (data) => {
+    let d = data;
+    console.log(d);
   });
 });

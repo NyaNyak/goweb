@@ -80,8 +80,24 @@ hr {
 
 #inputName {
   margin-top: 20px;
+  margin-right: 10px;
   text-align: center;
-  width: 260px;
+  width: 160px;
+  height: 35px;
+  font-size: 18px;
+  padding: 3px;
+  outline: none;
+  border: none;
+  font-family: "Sunday";
+  background-color: #ebe7e0;
+  font-weight: bold;
+  color: #58442d;
+}
+
+#inputRoom {
+  margin-top: 20px;
+  text-align: center;
+  width: 80px;
   height: 35px;
   font-size: 18px;
   padding: 3px;

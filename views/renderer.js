@@ -26,7 +26,7 @@ renderPlayer = () => {
     ctx.beginPath();
     ctx.font = "bold 15px Arial";
     ctx.fillStyle = "#4C4C4C";
-    ctx.fillText(`player ${player.color}`, player.x, player.y + 80);
+    ctx.fillText(`${player.name}`, player.x, player.y + 80);
     ctx.closePath();
   }
 
