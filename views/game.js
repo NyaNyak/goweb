@@ -229,9 +229,9 @@ collider = () => {
         damage.load();
         damage.volume = 0.7;
         damage.play();
+        break;
       }
     }
-    break;
   }
 };
 
