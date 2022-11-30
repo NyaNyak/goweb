@@ -4,14 +4,14 @@ const ctx = canvas.getContext("2d");
 const bgm = document.getElementById("bgm");
 const gunfire = new Audio("./resource/gunfire.mp3");
 const damage = new Audio("./resource/damage.mp3");
-
-let playerSpeed = 2;
+const reload = new Audio("./resource/reload.mp3");
 
 let rightPressed = false;
 let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
 let spacePressed = false;
+let reloadPressed = false;
 
 let players = [];
 let playerMap = {};
@@ -21,12 +21,21 @@ let bullets = [];
 
 function createBullet(id, dir, x, y, color) {
   let b = new Bullet(id, dir, x, y, color);
+  //let c = new Bullet(id, dir, x, y, color);
   if (b.dir == "left") {
     b.setX(x - 10);
   } else if (b.dir == "right") {
     b.setX(x + 70);
   }
+  /*
+  if (c.dir == "left") {
+    c.setX(x - 15);
+  } else if (b.dir == "right") {
+    c.setX(x + 75);
+  }
+  */
   bullets.push(b);
+  //bullets.push(c);
 }
 
 keyDownHandler = (e) => {
@@ -44,6 +53,9 @@ keyDownHandler = (e) => {
   }
   if (e.keyCode == 32) {
     spacePressed = false;
+  }
+  if (e.code == "R") {
+    reloadPressed = false;
   }
 };
 
@@ -63,16 +75,22 @@ keyUpHandler = (e) => {
   if (e.keyCode == 32) {
     spacePressed = true;
   }
+  if (e.keyCode == 82) {
+    reloadPressed = true;
+  }
 };
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
-joinUser = (id, x, y, hp, color) => {
+joinUser = (id, x, y, hp, attack, speed, bulletNum, color) => {
   let player = new Player(id, color);
   player.x = x;
   player.y = y;
   player.hp = hp;
+  player.attack = attack;
+  player.speed = speed;
+  player.bulletNum = bulletNum;
   player.color = color;
 
   players.push(player);
@@ -91,7 +109,7 @@ leaveUser = (id) => {
   delete playerMap[id];
 };
 
-updateState = (id, x, y, hp, dir) => {
+updateState = (id, x, y, hp, attack, speed, bulletNum, dir) => {
   let player = playerMap[id];
   if (!player) {
     return;
@@ -99,6 +117,9 @@ updateState = (id, x, y, hp, dir) => {
   player.x = x;
   player.y = y;
   player.hp = hp;
+  player.attack = attack;
+  player.speed = speed;
+  player.bulletNum = bulletNum;
   player.dir = dir;
 };
 
@@ -108,16 +129,39 @@ socket.on("user_id", (data) => {
   myId = data;
 });
 socket.on("join_user", (data) => {
-  joinUser(data.id, data.x, data.y, data.hp, data.color);
+  joinUser(
+    data.id,
+    data.x,
+    data.y,
+    data.hp,
+    data.attack,
+    data.speed,
+    data.bulletNum,
+    data.color
+  );
 });
 socket.on("leave_user", (data) => {
   leaveUser(data);
 });
 socket.on("update_state", (data) => {
-  updateState(data.id, data.x, data.y, data.hp, data.dir);
+  updateState(
+    data.id,
+    data.x,
+    data.y,
+    data.hp,
+    data.attack,
+    data.speed,
+    data.bulletNum,
+    data.dir
+  );
 });
 socket.on("update_bullet", (data) => {
-  createBullet(data.id, data.dir, data.x, data.y, data.color);
+  for (let i = 0; i < players.length; i++) {
+    if (players[i].getBulletNum() > 0) {
+      players[i].subBulletNum(1);
+      createBullet(data.id, data.dir, data.x, data.y, data.color);
+    }
+  }
 });
 socket.on("update_collider", (data) => {
   for (let i = 0; i < players.length; i++) {
@@ -136,6 +180,9 @@ sendData = () => {
     x: curPlayer.x,
     y: curPlayer.y,
     hp: curPlayer.hp,
+    attack: curPlayer.attack,
+    speed: curPlayer.speed,
+    bulletNum: curPlayer.bulletNum,
     dir: curPlayer.dir,
   };
   if (data) socket.emit("send_location", data);
@@ -184,7 +231,7 @@ collider = () => {
           //curPlayer.y -= 10;
         }
         damage.load();
-        damage.volume = 1;
+        damage.volume = 0.7;
         damage.play();
       }
     }
@@ -193,7 +240,7 @@ collider = () => {
 
 renderGame = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  bgm.volume = 0.6;
+  bgm.volume = 0.2;
   bgm.play();
 
   collider();

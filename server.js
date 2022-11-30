@@ -47,6 +47,9 @@ class Player {
     this.x = startX;
     this.y = startY;
     this.hp = 100;
+    this.attack = 4;
+    this.speed = 2;
+    this.bulletNum = 6;
     this.dir = "right";
     this.color = "red";
   }
@@ -55,7 +58,7 @@ class Player {
     return this.socket.id;
   }
 }
-
+/*
 class Bullet {
   constructor(dir, x, y) {
     this.x = x;
@@ -89,7 +92,7 @@ class Bullet {
     this.radius = radius;
   }
 }
-
+*/
 joinGame = (socket) => {
   let player = new Player(socket);
 
@@ -140,6 +143,9 @@ io.on("connection", (socket) => {
       x: player.x,
       y: player.y,
       hp: player.hp,
+      attack: player.attack,
+      speed: player.speed,
+      bulletNum: player.bulletNum,
       color: player.color,
     });
   }
@@ -149,6 +155,9 @@ io.on("connection", (socket) => {
     x: newPlayer.x,
     y: newPlayer.y,
     hp: newPlayer.hp,
+    attack: newPlayer.attack,
+    speed: newPlayer.speed,
+    bulletNum: newPlayer.bulletNum,
     color: newPlayer.color,
   });
 
@@ -167,6 +176,9 @@ io.on("connection", (socket) => {
       x: data.x,
       y: data.y,
       hp: data.hp,
+      attack: data.attack,
+      speed: data.speed,
+      bulletNum: data.bulletNum,
       dir: data.dir,
     });
   });

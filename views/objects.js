@@ -4,6 +4,9 @@ class Player {
     this.x = 800 / 2;
     this.y = 520 / 2;
     this.hp = 100;
+    this.attack = 4;
+    this.speed = 2;
+    this.bulletNum = 6;
     this.img = new Image();
     this.color = color;
     this.dir = "right";
@@ -25,6 +28,27 @@ class Player {
   }
   setHp(hp) {
     this.hp = hp;
+  }
+  getAttack() {
+    return this.attack;
+  }
+  setAttack(attack) {
+    this.attack = attack;
+  }
+  getSpeed() {
+    return this.speed;
+  }
+  setSpeed(speed) {
+    this.speed *= speed;
+  }
+  getBulletNum() {
+    return this.bulletNum;
+  }
+  subBulletNum(number) {
+    this.bulletNum -= number;
+  }
+  setBulletNum(number) {
+    this.bulletNum = number;
   }
   setImage(img, color, dir) {
     if (color == "red") {
@@ -48,9 +72,9 @@ class Bullet {
   }
   bulletUpdate(dir) {
     if (dir == "left") {
-      this.x -= 3.5;
+      this.x -= 8;
     } else {
-      this.x += 3.5;
+      this.x += 8;
     }
   }
   getId() {

@@ -39,7 +39,7 @@ renderPlayer = () => {
       curPlayer.x += 0;
       curPlayer.dir = "right";
     } else {
-      curPlayer.x += playerSpeed;
+      curPlayer.x += curPlayer.speed;
       curPlayer.dir = "right";
     }
   }
@@ -48,7 +48,7 @@ renderPlayer = () => {
       curPlayer.x -= 0;
       curPlayer.dir = "left";
     } else {
-      curPlayer.x -= playerSpeed;
+      curPlayer.x -= curPlayer.speed;
       curPlayer.dir = "left";
     }
   }
@@ -56,23 +56,37 @@ renderPlayer = () => {
     if (curPlayer.y <= minY) {
       curPlayer.y -= 0;
     } else {
-      curPlayer.y -= playerSpeed;
+      curPlayer.y -= curPlayer.speed;
     }
   }
   if (downPressed) {
     if (curPlayer.y >= maxY) {
       curPlayer.y += 0;
     } else {
-      curPlayer.y += playerSpeed;
+      curPlayer.y += curPlayer.speed;
     }
   }
   if (spacePressed) {
-    sendBullet();
-    gunfire.load();
-    gunfire.loop = false;
-    gunfire.volume = 0.6;
-    gunfire.play();
+    if (curPlayer.bulletNum > 0) {
+      sendBullet();
+      gunfire.load();
+      gunfire.loop = false;
+      gunfire.volume = 0.3;
+      gunfire.play();
+    }
     spacePressed = false;
+  }
+  if (reloadPressed) {
+    if (curPlayer.bulletNum == 0) {
+      reload.load();
+      reload.loop = false;
+      reload.volume = 1;
+      reload.play();
+      setTimeout(function () {
+        curPlayer.bulletNum = 6;
+      }, 3000);
+      reloadPressed = false;
+    }
   }
 };
 
@@ -123,12 +137,12 @@ renderUI = () => {
 
   ctx.beginPath();
   ctx.fillStyle = "#1A1A19";
-  ctx.fillRect(305, 470, 100 * 3, 20);
+  ctx.fillRect(291, 470, 100 * 3.3, 20);
   ctx.closePath();
 
   ctx.beginPath();
   ctx.fillStyle = "#01A70D";
-  ctx.fillRect(305, 470, curPlayer.hp * 3, 20);
+  ctx.fillRect(291, 470, curPlayer.hp * 3.3, 20);
   ctx.closePath();
 
   ctx.beginPath();
@@ -136,4 +150,59 @@ renderUI = () => {
   ctx.fillStyle = "#EBEDEA";
   ctx.fillText(`${curPlayer.hp} / 100`, 420, 485);
   ctx.closePath();
+
+  ctx.beginPath();
+  ctx.font = "bold 15px Arial";
+  ctx.fillStyle = "#E2B693";
+  ctx.fillText(`ATK`, 291, 435);
+  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.font = "bold 15px Arial";
+  ctx.fillStyle = "#EBEDEA";
+  ctx.fillText(`${curPlayer.attack}`, 332, 435);
+  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.font = "bold 15px Arial";
+  ctx.fillStyle = "#E2B693";
+  ctx.fillText(`SPD`, 290, 458);
+  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.font = "bold 15px Arial";
+  ctx.fillStyle = "#EBEDEA";
+  ctx.fillText(`${curPlayer.speed}`, 332, 458);
+  ctx.closePath();
+
+  for (let i = 0; i < curPlayer.bulletNum; i++) {
+    let bull = new Image();
+    bull.src = "./resource/bullet.png";
+    ctx.beginPath();
+    ctx.drawImage(bull, 360 + i * 19, 422, 14, 36);
+    ctx.closePath();
+  }
+
+  ctx.beginPath();
+  ctx.fillStyle = "#C8B595";
+  ctx.fillRect(490, 420, 40, 40);
+  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.fillStyle = "#C8B595";
+  ctx.fillRect(535, 420, 40, 40);
+  ctx.closePath();
+
+  ctx.beginPath();
+  ctx.fillStyle = "#C8B595";
+  ctx.fillRect(580, 420, 40, 40);
+  ctx.closePath();
+
+  /*획득한 아이템
+  let item = new Image();
+  item.src = "./resource/speed_up.png";
+  ctx.beginPath();
+  ctx.drawImage(item, 590, 425, 20, 30);
+  ctx.closePath();
+  */
 };
