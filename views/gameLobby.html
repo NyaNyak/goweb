@@ -41,22 +41,35 @@
         <span id="move">move</span>
         <span id="shoot">shoot</span>
       </div>
-      <input
-        type="text"
-        id="inputName"
-        placeholder="Your Name"
-        maxlength="10"
-      />
-      <div id="startBtn">
-        <button type="button" onclick="enterGame()">
-          <img
-            id="btnImage"
-            src="./resource/start_button.png"
-            width="270"
-            height="66"
-          />
-        </button>
-      </div>
+      <form action="/room" method="get">
+        <input
+          type="text"
+          id="inputName"
+          name="name"
+          placeholder="Your Name"
+          maxlength="10"
+          required
+        />
+        <input
+          type="text"
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+          id="inputRoom"
+          name="room"
+          placeholder="Room"
+          maxlength="5"
+          required
+        />
+        <div id="startBtn">
+          <button type="submit">
+            <img
+              id="btnImage"
+              src="./resource/start_button.png"
+              width="270"
+              height="66"
+            />
+          </button>
+        </div>
+      </form>
     </div>
     <audio controls autoplay id="lobbyBgm" hidden="true">
       <source src="./resource/gunfight.mp3" type="audio/mp3" />
