@@ -152,7 +152,6 @@ socket.on("update_state", (data) => {
 socket.on("update_bullet", (data) => {
   for (let i = 0; i < players.length; i++) {
     if (players[i].id == data.id && players[i].getBulletNum()) {
-      players[i].subBulletNum(1);
       createBullet(data.id, data.dir, data.x, data.y, data.color);
       break;
     }
@@ -185,6 +184,7 @@ sendData = () => {
 
 sendBullet = () => {
   let curPlayer = playerMap[myId];
+  curPlayer.subBulletNum(1);
   let data = {
     id: curPlayer.id,
     x: curPlayer.x,
