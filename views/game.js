@@ -263,4 +263,4 @@ update = () => {
   renderGame();
 };
 //renderPlayer();
-setInterval(update, 10);
+setInterval(update, 5);
