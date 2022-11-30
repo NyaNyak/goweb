@@ -226,8 +226,10 @@ collider = () => {
     // 내가 상대가 쏜 총알에 맞았을 때
     if (bullet.id != curPlayer.id) {
       if (
-        Math.sqrt(curPlayer.getX() + 30 - bullet.getX()) ** 2 +
-          (curPlayer.getY() + 30 - bullet.getY()) ** 2 <=
+        Math.sqrt(
+          (curPlayer.getX() + 30 - bullet.getX()) ** 2 +
+            (curPlayer.getY() + 30 - bullet.getY()) ** 2
+        ) <=
         bullet.getRadius() + 30
       ) {
         curPlayer.hp -= 1;
