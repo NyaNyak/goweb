@@ -77,10 +77,11 @@ class Player {
 }
 
 class Item {
-  constructor(type, x, y) {
+  constructor(type, x, y, key) {
     this.type = type;
     this.x = x;
     this.y = y;
+    this.key = key;
     this.img = new Image();
 
     // 4가지 속성

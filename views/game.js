@@ -43,12 +43,9 @@ function getRandInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function createItem(type, x, y) {
-  let item = new Item(type, x, y);
-  item.setX(x);
-  item.setY(y);
+function createItem(type, x, y, key) {
+  let item = new Item(type, x, y, key);
   items.push(item);
-  console.log(items);
 }
 
 keyDownHandler = (e) => {
@@ -228,7 +225,15 @@ socket.on("update_collider", (data) => {
 });
 socket.on("makeItem", (data) => {
   console.log("item");
-  createItem(data.type, data.x, data.y);
+  createItem(data.type, data.x, data.y, data.key);
+});
+socket.on("update_item", (data) => {
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].key == data.key) {
+      items.splice(i, 1);
+      break;
+    }
+  }
 });
 
 sendData = () => {
@@ -280,6 +285,19 @@ sendCollider = (bullet_key) => {
   if (data) socket.emit("collision_detect", data);
 };
 
+sendItemGet = (item_key) => {
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].key == item_key) {
+      items.splice(i, 1);
+      break;
+    }
+  }
+  let data = {
+    key: item_key,
+  };
+  if (data) socket.emit("itemGet_detect", data);
+};
+
 collider = () => {
   let curPlayer = playerMap[myId];
   for (let i = 0; i < bullets.length; i++) {
@@ -309,11 +327,32 @@ collider = () => {
   }
 };
 
+itemGet = () => {
+  let curPlayer = playerMap[myId];
+  for (let i = 0; i < items.length; i++) {
+    let item = items[i];
+    if (
+      Math.sqrt(
+        (curPlayer.getX() + 30 - item.getX()) ** 2 +
+          (curPlayer.getY() + 30 - item.getY()) ** 2
+      ) <= 34
+    ) {
+      curPlayer.hp += item.hp_recover;
+      curPlayer.setAttack(curPlayer.attack + item.attack);
+      curPlayer.setBulletRadius(curPlayer.bulletRadius + item.bulletRadius);
+      curPlayer.setSpeed(curPlayer.speed + item.speed);
+      sendItemGet(item.key);
+      break;
+    }
+  }
+};
+
 renderGame = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   bgm.volume = 0.2;
   bgm.play();
 
+  itemGet();
   collider();
   renderPlayer();
   renderItem();
@@ -321,8 +360,6 @@ renderGame = () => {
   renderUI();
 
   sendData();
-
-  console.log(bullets);
 };
 
 update = () => {
