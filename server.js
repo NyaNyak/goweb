@@ -186,7 +186,7 @@ io.on("connection", (socket) => {
     speed: newPlayer.speed,
     bulletNum: newPlayer.bulletNum,
     color: newPlayer.color,
-    name: player.name,
+    name: newPlayer.name,
   });
 
   if (players.length > 2 || isFailed) {
