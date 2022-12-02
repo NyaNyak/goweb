@@ -23,6 +23,8 @@ let isStart = false;
 let bulletKey = 0;
 let itemKey = 0;
 
+var TimerID = null;
+
 // 임시로 서버 시간 구현
 function TimeCheck(socket) {
   let itemType = Math.floor(Math.random() * 4);
@@ -35,7 +37,7 @@ function TimeCheck(socket) {
     key: itemKey++,
   };
   io.sockets.emit("makeItem", data);
-  setTimeout(TimeCheck, 4000, socket);
+  TimerID = setTimeout(TimeCheck, 4000, socket);
 }
 
 /*
@@ -159,6 +161,7 @@ endGame = (socket) => {
 io.on("connection", (socket) => {
   console.log(`${socket.id}님 입장`);
   socket.on("disconnect", (reason) => {
+    clearTimeout(TimerID);
     console.log(`${socket.id}님 ${reason}때문에 퇴장`);
     endGame(socket);
     socket.broadcast.emit("leave_user", socket.id);
@@ -174,7 +177,7 @@ io.on("connection", (socket) => {
   // 소켓 각각마다 TimeCheck 돌고 있음
   // 소켓 하나하나 커넥션이 따로임
   if (players.length == 2) {
-    setTimeout(TimeCheck, 5000, socket);
+    TimerID = setTimeout(TimeCheck, 5000, socket);
   }
 
   for (let i = 0; i < players.length; i++) {
