@@ -311,7 +311,7 @@ collider = () => {
         ) <=
         bullet.getRadius() + 30
       ) {
-        curPlayer.hp -= 1;
+        curPlayer.hp -= bullet.damage;
         sendCollider(bullet.key);
         if (bullet.dir == "right") {
           curPlayer.x += 2;
