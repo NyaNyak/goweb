@@ -9,7 +9,7 @@ const startY = 520 / 2;
 
 var query = "";
 
-let rooms = [];
+let db = [];
 
 let players = [];
 let playerMap = {};
@@ -63,8 +63,8 @@ app.get("/game", (req, res) => {
 
 app.get("/room", (req, res) => {
   query = req.query;
-  console.log(query);
   res.sendFile(__dirname + "/views/game.html");
+  console.log(query);
 });
 
 class Player {
