@@ -337,9 +337,9 @@ itemGet = () => {
           (curPlayer.getY() + 30 - item.getY()) ** 2
       ) <= 34
     ) {
-      curPlayer.hp += item.hp_recover;
+      curPlayer.setHp(Math.min(100, curPlayer.hp + item.hp_recover));
       curPlayer.setAttack(curPlayer.attack + item.attack);
-      curPlayer.setBulletRadius(curPlayer.bulletRadius + item.bulletRadius);
+      curPlayer.setBulletRadius(curPlayer.bulletRadius + item.bullet_radius);
       curPlayer.setSpeed(curPlayer.speed + item.speed);
       sendItemGet(item.key);
       break;

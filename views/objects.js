@@ -42,7 +42,7 @@ class Player {
     return this.speed;
   }
   setSpeed(speed) {
-    this.speed *= speed;
+    this.speed = speed;
   }
   getInven() {
     return this.inven;
@@ -100,24 +100,36 @@ class Item {
         this.img.width = 30;
         this.img.height = 50;
         this.attack = 1;
+        this.hp_recover = 0;
+        this.bullet_radius = 0;
+        this.speed = 0;
         break;
       case 1:
         this.img.src = "/resource/double_shot.png";
         this.img.width = 30;
         this.img.height = 50;
         this.bullet_radius = 2;
+        this.attack = 0;
+        this.hp_recover = 0;
+        this.speed = 0;
         break;
       case 2:
         this.img.src = "/resource/recovery.png";
         this.img.width = 50;
         this.img.height = 25;
         this.hp_recover = 30;
+        this.bullet_radius = 0;
+        this.attack = 0;
+        this.speed = 0;
         break;
       case 3:
         this.img.src = "/resource/speed_up.png";
         this.img.width = 40;
         this.img.height = 40;
         this.speed = 2;
+        this.attack = 0;
+        this.bullet_radius = 0;
+        this.hp_recover = 0;
         break;
 
       default:

@@ -34,7 +34,7 @@ function TimeCheck(socket) {
     y: y,
     key: itemKey++,
   };
-  socket.broadcast.emit("makeItem", data);
+  io.sockets.emit("makeItem", data);
   setTimeout(TimeCheck, 4000, socket);
 }
 
