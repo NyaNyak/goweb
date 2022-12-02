@@ -24,10 +24,13 @@ let bulletKey = 0;
 
 // 임시로 서버 시간 구현
 function TimeCheck(socket) {
+  let itemType = Math.floor(Math.random() * 4);
   let data = {
-    time: key++,
+    type: itemType,
+    x: 800,
+    y: 520,
   };
-  socket.emit("timer", data);
+  socket.emit("makeItem", data);
   setTimeout(TimeCheck, 1000, socket);
 }
 
@@ -163,6 +166,8 @@ io.on("connection", (socket) => {
 
   let newPlayer = joinGame(socket);
   socket.emit("user_id", socket.id);
+
+  TimeCheck(socket);
 
   for (let i = 0; i < players.length; i++) {
     let player = players[i];

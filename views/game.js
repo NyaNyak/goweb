@@ -45,9 +45,10 @@ function getRandInt(min, max) {
 
 function createItem(type, x, y) {
   let item = new Item(type, x, y);
-  item.setX(getRandInt(0, x));
-  item.setY(getRandInt(0, y - 90));
+  item.setX(Math.floor(Math.random() * 800));
+  item.setY(Math.floor(Math.random() * 430));
   items.push(item);
+  console.log(items);
 }
 
 keyDownHandler = (e) => {
@@ -224,6 +225,10 @@ socket.on("update_collider", (data) => {
     }
   }
 });
+socket.on("makeItem", (data) => {
+  console.log("item");
+  createItem(data.type, data.x, data.y);
+});
 
 sendData = () => {
   let curPlayer = playerMap[myId];
@@ -315,6 +320,8 @@ renderGame = () => {
   renderUI();
 
   sendData();
+
+  console.log(bullets);
 };
 
 update = () => {

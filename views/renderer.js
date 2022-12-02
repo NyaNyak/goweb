@@ -103,7 +103,7 @@ renderItem = () => {
   for (let i = 0; i < items.length; i++) {
     let item = items[i];
     ctx.beginPath();
-    ctx.drawImage(item.img, 160, 425, item.img.width, item.img.height);
+    ctx.drawImage(item.img, item.x, item.y, item.img.width, item.img.height);
     ctx.closePath();
   }
 };
