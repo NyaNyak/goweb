@@ -45,8 +45,8 @@ function getRandInt(min, max) {
 
 function createItem(type, x, y) {
   let item = new Item(type, x, y);
-  item.setX(Math.floor(Math.random() * 800));
-  item.setY(Math.floor(Math.random() * 360));
+  item.setX(x);
+  item.setY(y);
   items.push(item);
   console.log(items);
 }

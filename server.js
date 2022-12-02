@@ -25,10 +25,12 @@ let bulletKey = 0;
 // 임시로 서버 시간 구현
 function TimeCheck(socket) {
   let itemType = Math.floor(Math.random() * 4);
+  let x = Math.floor(Math.random() * 800);
+  let y = Math.floor(Math.random() * 360);
   let data = {
     type: itemType,
-    x: 800,
-    y: 520,
+    x: x,
+    y: y,
   };
   socket.emit("makeItem", data);
   setTimeout(TimeCheck, 1000, socket);
