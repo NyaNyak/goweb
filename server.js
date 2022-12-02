@@ -21,6 +21,7 @@ let isFailed = false;
 let isStart = false;
 
 let bulletKey = 0;
+let itemKey = 0;
 
 // 임시로 서버 시간 구현
 function TimeCheck(socket) {
@@ -31,9 +32,10 @@ function TimeCheck(socket) {
     type: itemType,
     x: x,
     y: y,
+    key: itemKey++,
   };
-  socket.emit("makeItem", data);
-  setTimeout(TimeCheck, 1000, socket);
+  socket.broadcast.emit("makeItem", data);
+  setTimeout(TimeCheck, 4000, socket);
 }
 
 /*
@@ -169,6 +171,8 @@ io.on("connection", (socket) => {
   let newPlayer = joinGame(socket);
   socket.emit("user_id", socket.id);
 
+  // 소켓 각각마다 TimeCheck 돌고 있음
+  // 소켓 하나하나 커넥션이 따로임
   TimeCheck(socket);
 
   for (let i = 0; i < players.length; i++) {
@@ -227,6 +231,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_bullet", (data) => {
+    console.log(data.bulletRadius);
     io.sockets.emit("update_bullet", {
       id: data.id,
       key: bulletKey++,
@@ -248,8 +253,9 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("enterGame", (data) => {
-    let d = data;
-    console.log(d);
+  socket.on("itemGet_detect", (data) => {
+    io.sockets.emit("update_item", {
+      key: data.key,
+    });
   });
 });
