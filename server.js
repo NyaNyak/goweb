@@ -74,6 +74,8 @@ class Player {
     this.hp = 100;
     this.attack = 4;
     this.speed = 2;
+    this.inven = [];
+    this.bulletRadius = 4;
     this.bulletNum = 6;
     this.dir = "right";
     this.color = "red";
@@ -171,6 +173,8 @@ io.on("connection", (socket) => {
       hp: player.hp,
       attack: player.attack,
       speed: player.speed,
+      inven: player.inven,
+      bulletRadius: player.bulletRadius,
       bulletNum: player.bulletNum,
       color: player.color,
       name: player.name,
@@ -184,6 +188,8 @@ io.on("connection", (socket) => {
     hp: newPlayer.hp,
     attack: newPlayer.attack,
     speed: newPlayer.speed,
+    inven: newPlayer.inven,
+    bulletRadius: newPlayer.bulletRadius,
     bulletNum: newPlayer.bulletNum,
     color: newPlayer.color,
   });
@@ -205,6 +211,8 @@ io.on("connection", (socket) => {
       hp: data.hp,
       attack: data.attack,
       speed: data.speed,
+      inven: data.inven,
+      bulletRadius: data.bulletRadius,
       bulletNum: data.bulletNum,
       dir: data.dir,
     });
@@ -217,7 +225,9 @@ io.on("connection", (socket) => {
       dir: data.dir,
       x: data.x,
       y: data.y,
+      damage: data.damage,
       color: data.color,
+      radius: data.radius,
     });
   });
 
