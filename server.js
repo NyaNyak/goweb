@@ -192,6 +192,7 @@ io.on("connection", (socket) => {
     bulletRadius: newPlayer.bulletRadius,
     bulletNum: newPlayer.bulletNum,
     color: newPlayer.color,
+    name: newPlayer.name,
   });
 
   if (players.length > 2 || isFailed) {
