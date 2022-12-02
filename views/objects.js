@@ -4,8 +4,10 @@ class Player {
     this.x = 800 / 2;
     this.y = 520 / 2;
     this.hp = 100;
-    this.attack = 4;
+    this.attack = 2;
     this.speed = 2;
+    this.inven = [];
+    this.bulletRadius = 4;
     this.bulletNum = 6;
     this.img = new Image();
     this.color = color;
@@ -42,6 +44,18 @@ class Player {
   setSpeed(speed) {
     this.speed *= speed;
   }
+  getInven() {
+    return this.inven;
+  }
+  setInven(item) {
+    this.inven.push(item);
+  }
+  getBulletRadius() {
+    return this.bulletRadius;
+  }
+  setBulletRadius(radius) {
+    this.bulletRadius = radius;
+  }
   getBulletNum() {
     return this.bulletNum;
   }
@@ -62,15 +76,83 @@ class Player {
   }
 }
 
+class Item {
+  constructor(type, x, y) {
+    this.type = type;
+    this.x = x;
+    this.y = y;
+    this.img = new Image();
+
+    // 4가지 속성
+    this.attack = 0;
+    this.bullet_radius = 0;
+    this.hp_recover = 0;
+    this.speed = 0;
+
+    // 0 : 공격력 업
+    // 1 : 더블 샷
+    // 2 : 회복
+    // 3 : 속도 증가
+    switch (type) {
+      case 0:
+        this.img.src = "/resource/attack_power.png";
+        this.img.width = 30;
+        this.img.height = 50;
+        this.attack = 1;
+        break;
+      case 1:
+        this.img.src = "/resource/double_shot.png";
+        this.img.width = 30;
+        this.img.height = 50;
+        this.bullet_radius = 2;
+        break;
+      case 2:
+        this.img.src = "/resource/recovery.png";
+        this.img.width = 50;
+        this.img.height = 25;
+        this.hp_recover = 30;
+        break;
+      case 3:
+        this.img.src = "/resource/speed_up.png";
+        this.img.width = 40;
+        this.img.height = 40;
+        this.speed = 2;
+        break;
+
+      default:
+        break;
+    }
+  }
+  getType() {
+    return this.type;
+  }
+  setType(type) {
+    this.type = type;
+  }
+  getX() {
+    return this.x;
+  }
+  setX(x) {
+    this.x = x;
+  }
+  getY() {
+    return this.y;
+  }
+  setY(y) {
+    this.y = y;
+  }
+}
+
 class Bullet {
-  constructor(id, key, dir, x, y, color) {
+  constructor(id, key, dir, damage, x, y, color, radius) {
     this.id = id;
     this.key = key;
     this.x = x;
     this.y = y + 32;
     this.dir = dir;
+    this.damage = damage;
     this.color = color;
-    this.radius = 4;
+    this.radius = radius;
   }
   bulletUpdate(dir) {
     if (dir == "left") {
@@ -103,10 +185,16 @@ class Bullet {
   setDir(dir) {
     this.dir = dir;
   }
+  getDamage() {
+    return this.damage;
+  }
+  setDamage(damage) {
+    this.damage = damage;
+  }
   getRadius() {
     return this.radius;
   }
-  setRadius() {
+  setRadius(radius) {
     this.radius = radius;
   }
   getColor() {

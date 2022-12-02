@@ -18,9 +18,10 @@ let playerMap = {};
 let myId;
 
 let bullets = [];
+let items = [];
 
-function createBullet(id, key, dir, x, y, color) {
-  let b = new Bullet(id, key, dir, x, y, color);
+function createBullet(id, key, dir, damage, x, y, color, radius) {
+  let b = new Bullet(id, key, dir, damage, x, y, color, radius);
   //let c = new Bullet(id, dir, x, y, color);
   if (b.dir == "left") {
     b.setX(x - 10);
@@ -36,6 +37,18 @@ function createBullet(id, key, dir, x, y, color) {
   */
   bullets.push(b);
   //bullets.push(c);
+}
+
+function getRandInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function createItem(type, x, y) {
+  let item = new Item(type, x, y);
+  item.setX(x);
+  item.setY(y);
+  items.push(item);
+  console.log(items);
 }
 
 keyDownHandler = (e) => {
@@ -77,13 +90,27 @@ keyUpHandler = (e) => {
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
-joinUser = (id, x, y, hp, attack, speed, bulletNum, color, name) => {
+joinUser = (
+  id,
+  x,
+  y,
+  hp,
+  attack,
+  speed,
+  inven,
+  bulletRadius,
+  bulletNum,
+  color,
+  name
+) => {
   let player = new Player(id, color, name);
   player.x = x;
   player.y = y;
   player.hp = hp;
   player.attack = attack;
   player.speed = speed;
+  player.inven = inven;
+  player.bulletRadius = bulletRadius;
   player.bulletNum = bulletNum;
   player.color = color;
   player.name = name;
@@ -104,7 +131,18 @@ leaveUser = (id) => {
   delete playerMap[id];
 };
 
-updateState = (id, x, y, hp, attack, speed, bulletNum, dir) => {
+updateState = (
+  id,
+  x,
+  y,
+  hp,
+  attack,
+  speed,
+  inven,
+  bulletRadius,
+  bulletNum,
+  dir
+) => {
   let player = playerMap[id];
   if (!player) {
     return;
@@ -114,6 +152,8 @@ updateState = (id, x, y, hp, attack, speed, bulletNum, dir) => {
   player.hp = hp;
   player.attack = attack;
   player.speed = speed;
+  player.inven = inven;
+  player.bulletRadius = bulletRadius;
   player.bulletNum = bulletNum;
   player.dir = dir;
 };
@@ -131,6 +171,8 @@ socket.on("join_user", (data) => {
     data.hp,
     data.attack,
     data.speed,
+    data.inven,
+    data.bulletRadius,
     data.bulletNum,
     data.color,
     data.name
@@ -147,6 +189,8 @@ socket.on("update_state", (data) => {
     data.hp,
     data.attack,
     data.speed,
+    data.inven,
+    data.bulletRadius,
     data.bulletNum,
     data.dir
   );
@@ -154,7 +198,16 @@ socket.on("update_state", (data) => {
 socket.on("update_bullet", (data) => {
   for (let i = 0; i < players.length; i++) {
     if (players[i].id == data.id) {
-      createBullet(data.id, data.key, data.dir, data.x, data.y, data.color);
+      createBullet(
+        data.id,
+        data.key,
+        data.dir,
+        data.damage,
+        data.x,
+        data.y,
+        data.color,
+        data.radius
+      );
       break;
     }
   }
@@ -173,8 +226,9 @@ socket.on("update_collider", (data) => {
     }
   }
 });
-socket.on("timer", (data) => {
-  console.log(data.type);
+socket.on("makeItem", (data) => {
+  console.log("item");
+  createItem(data.type, data.x, data.y);
 });
 
 sendData = () => {
@@ -186,6 +240,8 @@ sendData = () => {
     hp: curPlayer.hp,
     attack: curPlayer.attack,
     speed: curPlayer.speed,
+    inven: curPlayer.inven,
+    bulletRadius: curPlayer.bulletRadius,
     bulletNum: curPlayer.bulletNum,
     dir: curPlayer.dir,
   };
@@ -200,7 +256,9 @@ sendBullet = () => {
     x: curPlayer.x,
     y: curPlayer.y,
     dir: curPlayer.dir,
+    damage: curPlayer.attack,
     color: curPlayer.color,
+    radius: curPlayer.bulletRadius,
   };
   if (data) socket.emit("send_bullet", data);
 };
@@ -258,10 +316,13 @@ renderGame = () => {
 
   collider();
   renderPlayer();
+  renderItem();
   renderBullet();
   renderUI();
 
   sendData();
+
+  console.log(bullets);
 };
 
 update = () => {

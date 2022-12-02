@@ -99,6 +99,15 @@ renderPlayer = () => {
   }
 };
 
+renderItem = () => {
+  for (let i = 0; i < items.length; i++) {
+    let item = items[i];
+    ctx.beginPath();
+    ctx.drawImage(item.img, item.x, item.y, item.img.width, item.img.height);
+    ctx.closePath();
+  }
+};
+
 renderBullet = () => {
   for (let i = 0; i < bullets.length; i++) {
     let bullet = bullets[i];
