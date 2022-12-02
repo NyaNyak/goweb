@@ -46,7 +46,6 @@ function getRandInt(min, max) {
 function createItem(type, x, y, key) {
   let item = new Item(type, x, y, key);
   items.push(item);
-  console.log(items);
 }
 
 keyDownHandler = (e) => {
@@ -339,9 +338,9 @@ itemGet = () => {
       ) <= 34
     ) {
       curPlayer.hp += item.hp_recover;
-      curPlayer.attack += item.attack;
-      curPlayer.bulletRadius += item.bulletRadius;
-      curPlayer.speed += item.speed;
+      curPlayer.setAttack(curPlayer.attack + item.attack);
+      curPlayer.setBulletRadius(curPlayer.bulletRadius + item.bulletRadius);
+      curPlayer.setSpeed(curPlayer.speed + item.speed);
       sendItemGet(item.key);
       break;
     }
