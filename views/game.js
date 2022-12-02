@@ -20,8 +20,8 @@ let myId;
 let bullets = [];
 let items = [];
 
-function createBullet(id, key, dir, x, y, damage, color) {
-  let b = new Bullet(id, key, dir, x, y, damage, color);
+function createBullet(id, key, dir, damage, x, y, color, radius) {
+  let b = new Bullet(id, key, dir, damage, x, y, color, radius);
   //let c = new Bullet(id, dir, x, y, color);
   if (b.dir == "left") {
     b.setX(x - 10);
@@ -46,7 +46,7 @@ function getRandInt(min, max) {
 function createItem(type, x, y) {
   let item = new Item(type, x, y);
   item.setX(Math.floor(Math.random() * 800));
-  item.setY(Math.floor(Math.random() * 430));
+  item.setY(Math.floor(Math.random() * 360));
   items.push(item);
   console.log(items);
 }
@@ -202,10 +202,11 @@ socket.on("update_bullet", (data) => {
         data.id,
         data.key,
         data.dir,
+        data.damage,
         data.x,
         data.y,
-        data.damage,
-        data.color
+        data.color,
+        data.radius
       );
       break;
     }
@@ -257,7 +258,7 @@ sendBullet = () => {
     dir: curPlayer.dir,
     damage: curPlayer.attack,
     color: curPlayer.color,
-    radius: curPlayer.radius,
+    radius: curPlayer.bulletRadius,
   };
   if (data) socket.emit("send_bullet", data);
 };

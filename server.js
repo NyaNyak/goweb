@@ -229,9 +229,9 @@ io.on("connection", (socket) => {
       id: data.id,
       key: bulletKey++,
       dir: data.dir,
+      damage: data.damage,
       x: data.x,
       y: data.y,
-      damage: data.damage,
       color: data.color,
       radius: data.radius,
     });

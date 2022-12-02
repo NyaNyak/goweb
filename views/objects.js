@@ -194,7 +194,7 @@ class Bullet {
   getRadius() {
     return this.radius;
   }
-  setRadius() {
+  setRadius(radius) {
     this.radius = radius;
   }
   getColor() {
