@@ -173,6 +173,9 @@ socket.on("update_collider", (data) => {
     }
   }
 });
+socket.on("timer", (data) => {
+  console.log(data.type);
+});
 
 sendData = () => {
   let curPlayer = playerMap[myId];
