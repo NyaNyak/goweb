@@ -173,7 +173,9 @@ io.on("connection", (socket) => {
 
   // 소켓 각각마다 TimeCheck 돌고 있음
   // 소켓 하나하나 커넥션이 따로임
-  TimeCheck(socket);
+  if (players.length == 2) {
+    setTimeout(TimeCheck, 5000, socket);
+  }
 
   for (let i = 0; i < players.length; i++) {
     let player = players[i];
