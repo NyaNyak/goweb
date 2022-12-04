@@ -28,8 +28,8 @@ var TimerID = null;
 // 임시로 서버 시간 구현
 function TimeCheck(socket) {
   let itemType = Math.floor(Math.random() * 4);
-  let x = Math.floor(Math.random() * 800);
-  let y = Math.floor(Math.random() * 360);
+  let x = Math.floor(Math.random() * 750) + 50;
+  let y = Math.floor(Math.random() * 300) + 50;
   let data = {
     type: itemType,
     x: x,
@@ -37,7 +37,7 @@ function TimeCheck(socket) {
     key: itemKey++,
   };
   io.sockets.emit("makeItem", data);
-  TimerID = setTimeout(TimeCheck, 4000, socket);
+  TimerID = setTimeout(TimeCheck, 15000, socket);
 }
 
 /*
@@ -84,7 +84,7 @@ class Player {
     this.attack = 4;
     this.speed = 2;
     this.inven = [];
-    this.bulletRadius = 4;
+    this.shotNum = 1;
     this.bulletNum = 6;
     this.dir = "right";
     this.color = "red";
@@ -177,7 +177,7 @@ io.on("connection", (socket) => {
   // 소켓 각각마다 TimeCheck 돌고 있음
   // 소켓 하나하나 커넥션이 따로임
   if (players.length == 2) {
-    TimerID = setTimeout(TimeCheck, 5000, socket);
+    TimerID = setTimeout(TimeCheck, 15000, socket);
   }
 
   for (let i = 0; i < players.length; i++) {
@@ -190,7 +190,7 @@ io.on("connection", (socket) => {
       attack: player.attack,
       speed: player.speed,
       inven: player.inven,
-      bulletRadius: player.bulletRadius,
+      shotNum: player.shotNum,
       bulletNum: player.bulletNum,
       color: player.color,
       name: player.name,
@@ -205,7 +205,7 @@ io.on("connection", (socket) => {
     attack: newPlayer.attack,
     speed: newPlayer.speed,
     inven: newPlayer.inven,
-    bulletRadius: newPlayer.bulletRadius,
+    shotNum: newPlayer.shotNum,
     bulletNum: newPlayer.bulletNum,
     color: newPlayer.color,
     name: newPlayer.name,
@@ -229,7 +229,7 @@ io.on("connection", (socket) => {
       attack: data.attack,
       speed: data.speed,
       inven: data.inven,
-      bulletRadius: data.bulletRadius,
+      shotNum: data.shotNum,
       bulletNum: data.bulletNum,
       dir: data.dir,
     });
