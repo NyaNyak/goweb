@@ -26,7 +26,7 @@ var TimerID = null;
 // 임시로 서버 시간 구현
 function TimeCheck(socket) {
   let itemType = Math.floor(Math.random() * 4);
-  let x = Math.floor(Math.random() * 750) + 50;
+  let x = Math.floor(Math.random() * 700) + 50;
   let y = Math.floor(Math.random() * 300) + 50;
   let data = {
     type: itemType,
@@ -78,8 +78,8 @@ class Player {
     this.socket = socket;
     this.x = startX;
     this.y = startY;
-    this.hp = 100;
-    this.attack = 4;
+    this.hp = 200;
+    this.attack = 5;
     this.speed = 2;
     this.inven = [];
     this.shotNum = 1;
@@ -171,7 +171,7 @@ io.on("connection", (socket) => {
 
     if (players.length == 1) {
       let data = {
-        winner: players[0].name,
+        winner: players[0].id,
         reason: "disconnect",
       };
       console.log(data.winner);
@@ -273,15 +273,15 @@ io.on("connection", (socket) => {
   });
 
   socket.on("endgame", (data) => {
-    let winner_name = "";
+    let winner_id = "";
     for (let i = 0; i < players.length; i++) {
       if (players[i].id != data.id) {
-        winner_name = players[i].name;
+        winner_id = players[i].id;
         break;
       }
     }
     io.sockets.emit("winner", {
-      winner: winner_name,
+      winner: winner_id,
       reason: "game_win",
     });
   });

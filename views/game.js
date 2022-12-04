@@ -5,6 +5,8 @@ const bgm = document.getElementById("bgm");
 const gunfire = new Audio("./resource/gunfire.mp3");
 const damage = new Audio("./resource/damage.mp3");
 const reload = new Audio("./resource/reload.mp3");
+const victory = new Audio("./resource/victory.mp3");
+const defeat = new Audio("./resource/defeat.mp3");
 
 let rightPressed = false;
 let leftPressed = false;
@@ -16,6 +18,8 @@ let reloadPressed = false;
 let players = [];
 let playerMap = {};
 let myId;
+
+let winner;
 
 let bullets = [];
 let items = [];
@@ -230,8 +234,9 @@ socket.on("winner", (data) => {
   console.log("승리 " + data.winner);
   console.log("사유 " + data.reason);
   clearInterval(game);
-
-  // 이 곳에 요일바 입력
+  bgm.volume = 0;
+  winner = data.winner;
+  gameOver();
 });
 
 sendData = () => {
@@ -353,13 +358,58 @@ itemGet = () => {
           console.log(curPlayer.getInven());
         }
       }
-      curPlayer.setHp(Math.min(100, curPlayer.hp + item.hp_recover));
+      curPlayer.setHp(Math.min(200, curPlayer.hp + item.hp_recover));
       curPlayer.setAttack(curPlayer.attack + item.attack);
       curPlayer.setShotNum(item.shot);
       curPlayer.setSpeed(curPlayer.speed + item.speed);
       sendItemGet(item.key);
       break;
     }
+  }
+};
+
+gameOver = () => {
+  let curPlayer = playerMap[myId];
+  ctx.beginPath();
+  ctx.fillStyle = "black";
+  ctx.globalAlpha = 0.6;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.closePath();
+
+  if (curPlayer.id == winner) {
+    ctx.beginPath();
+    ctx.font = "bold 110px Sunday";
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#e00f0f";
+    ctx.fillText(`You Win!`, 155, 185);
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.font = "bold 110px Sunday";
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#d5b052";
+    ctx.fillText(`You Win!`, 150, 180);
+    ctx.closePath();
+
+    victory.volume = 0.3;
+    victory.play();
+  } else {
+    ctx.beginPath();
+    ctx.font = "bold 110px Sunday";
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#532512";
+    ctx.fillText(`You Lose...`, 150, 185);
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.font = "bold 110px Sunday";
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#6d6d6d";
+    ctx.fillText(`You Lose...`, 145, 180);
+    ctx.closePath();
+
+    defeat.volume = 0.3;
+    defeat.play();
   }
 };
 

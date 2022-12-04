@@ -18,13 +18,13 @@ renderPlayer = () => {
     ctx.fillRect(
       player.getX() - 5,
       player.getY() - 20,
-      (player.getHp() / 4) * 3,
+      ((player.getHp() / 4) * 3) / 2,
       10
     );
     ctx.closePath();
 
     ctx.beginPath();
-    ctx.font = "bold 15px Arial";
+    ctx.font = "bold 13px Sunday";
     ctx.fillStyle = "#4C4C4C";
     ctx.fillText(`${player.name}`, player.x, player.y + 80);
     ctx.closePath();
@@ -155,42 +155,42 @@ renderUI = () => {
 
   ctx.beginPath();
   ctx.fillStyle = "#1A1A19";
-  ctx.fillRect(291, 470, 100 * 3.3, 20);
+  ctx.fillRect(291, 470, (200 * 3.3) / 2, 20);
   ctx.closePath();
 
   ctx.beginPath();
   ctx.fillStyle = "#01A70D";
-  ctx.fillRect(291, 470, curPlayer.hp * 3.3, 20);
+  ctx.fillRect(291, 470, (curPlayer.hp * 3.3) / 2, 20);
   ctx.closePath();
 
   ctx.beginPath();
-  ctx.font = "15px Arial";
+  ctx.font = "15px Sunday";
   ctx.fillStyle = "#EBEDEA";
-  ctx.fillText(`${curPlayer.hp} / 100`, 420, 485);
+  ctx.fillText(`${curPlayer.hp} / 200`, 420, 485);
   ctx.closePath();
 
   ctx.beginPath();
-  ctx.font = "bold 15px Arial";
+  ctx.font = "bold 15px Sunday";
   ctx.fillStyle = "#E2B693";
   ctx.fillText(`ATK`, 291, 435);
   ctx.closePath();
 
   ctx.beginPath();
-  ctx.font = "bold 15px Arial";
+  ctx.font = "bold 16px Arial";
   ctx.fillStyle = "#EBEDEA";
-  ctx.fillText(`${curPlayer.attack}`, 332, 435);
+  ctx.fillText(`${curPlayer.attack}`, 330, 436);
   ctx.closePath();
 
   ctx.beginPath();
-  ctx.font = "bold 15px Arial";
+  ctx.font = "bold 15px Sunday";
   ctx.fillStyle = "#E2B693";
   ctx.fillText(`SPD`, 290, 458);
   ctx.closePath();
 
   ctx.beginPath();
-  ctx.font = "bold 15px Arial";
+  ctx.font = "bold 16px Arial";
   ctx.fillStyle = "#EBEDEA";
-  ctx.fillText(`${curPlayer.speed}`, 332, 458);
+  ctx.fillText(`${curPlayer.speed}`, 330, 460);
   ctx.closePath();
 
   for (let i = 0; i < curPlayer.bulletNum; i++) {

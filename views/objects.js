@@ -3,8 +3,8 @@ class Player {
     this.id = id;
     this.x = 800 / 2;
     this.y = 520 / 2;
-    this.hp = 100;
-    this.attack = 2;
+    this.hp = 200;
+    this.attack = 5;
     this.speed = 2;
     this.inven = [];
     this.shotNum = 1;
@@ -117,7 +117,7 @@ class Item {
         this.img.src = "/resource/recovery.png";
         this.img.width = 50;
         this.img.height = 25;
-        this.hp_recover = 30;
+        this.hp_recover = 50;
         this.shot = 1;
         this.attack = 0;
         this.speed = 0;
