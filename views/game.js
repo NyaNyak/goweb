@@ -226,6 +226,13 @@ socket.on("update_item", (data) => {
     }
   }
 });
+socket.on("winner", (data) => {
+  console.log("승리 " + data.winner);
+  console.log("사유 " + data.reason);
+  clearInterval(game);
+
+  // 이 곳에 요일바 입력
+});
 
 sendData = () => {
   let curPlayer = playerMap[myId];
@@ -292,6 +299,13 @@ sendItemGet = (item_key) => {
   if (data) socket.emit("itemGet_detect", data);
 };
 
+sendEndGame = (id) => {
+  let data = {
+    id: id,
+  };
+  if (data) socket.emit("endgame", data);
+};
+
 collider = () => {
   let curPlayer = playerMap[myId];
   for (let i = 0; i < bullets.length; i++) {
@@ -305,14 +319,19 @@ collider = () => {
         ) <=
         bullet.getRadius() + 30
       ) {
-        curPlayer.hp -= bullet.damage;
-        sendCollider(bullet.key);
-        if (bullet.dir == "right") {
-          curPlayer.x += 2;
+        curPlayer.hp = Math.max(curPlayer.hp - bullet.damage, 0);
+
+        if (curPlayer.hp > 0) {
+          sendCollider(bullet.key);
+          if (bullet.dir == "right") {
+            curPlayer.x += 2;
+          } else {
+            curPlayer.x -= 2;
+          }
+          break;
         } else {
-          curPlayer.x -= 2;
+          sendEndGame(curPlayer.id);
         }
-        break;
       }
     }
   }
@@ -363,4 +382,4 @@ update = () => {
   renderGame();
 };
 //renderPlayer();
-setInterval(update, 10);
+let game = setInterval(update, 10);

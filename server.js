@@ -9,8 +9,6 @@ const startY = 520 / 2;
 
 var query = "";
 
-let db = [];
-
 let players = [];
 let playerMap = {};
 
@@ -163,11 +161,21 @@ io.on("connection", (socket) => {
   socket.on("disconnect", (reason) => {
     clearTimeout(TimerID);
     console.log(`${socket.id}님 ${reason}때문에 퇴장`);
+
     endGame(socket);
     socket.broadcast.emit("leave_user", socket.id);
     if (players.length == 0) {
       isStart = false;
       isFailed = false;
+    }
+
+    if (players.length == 1) {
+      let data = {
+        winner: players[0].name,
+        reason: "disconnect",
+      };
+      console.log(data.winner);
+      io.sockets.emit("winner", data);
     }
   });
 
@@ -261,6 +269,20 @@ io.on("connection", (socket) => {
   socket.on("itemGet_detect", (data) => {
     io.sockets.emit("update_item", {
       key: data.key,
+    });
+  });
+
+  socket.on("endgame", (data) => {
+    let winner_name = "";
+    for (let i = 0; i < players.length; i++) {
+      if (players[i].id != data.id) {
+        winner_name = players[i].name;
+        break;
+      }
+    }
+    io.sockets.emit("winner", {
+      winner: winner_name,
+      reason: "game_win",
     });
   });
 });
