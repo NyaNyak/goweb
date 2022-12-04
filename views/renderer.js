@@ -216,6 +216,39 @@ renderUI = () => {
   ctx.fillRect(580, 420, 40, 40);
   ctx.closePath();
 
+  for (let i = 0; i < curPlayer.getInven().length; i++) {
+    let item = new Image();
+    switch (curPlayer.getInven()[i]) {
+      case 0:
+        item.src = "/resource/attack_power.png";
+        item.width = 21;
+        item.height = 35;
+        break;
+      case 1:
+        item.src = "/resource/double_shot.png";
+        item.width = 18;
+        item.height = 36;
+        break;
+      case 3:
+        item.src = "/resource/speed_up.png";
+        item.width = 27;
+        item.height = 27;
+        break;
+
+      default:
+        break;
+    }
+    ctx.beginPath();
+    ctx.drawImage(
+      item,
+      490 + (40 - item.width) / 2 + 45 * i,
+      420 + (40 - item.height) / 2,
+      item.width,
+      item.height
+    );
+    ctx.closePath();
+  }
+
   /*획득한 아이템
   let item = new Image();
   item.src = "./resource/speed_up.png";
