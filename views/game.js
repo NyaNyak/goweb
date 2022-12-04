@@ -95,7 +95,7 @@ joinUser = (
   attack,
   speed,
   inven,
-  bulletRadius,
+  shotNum,
   bulletNum,
   color,
   name
@@ -107,7 +107,7 @@ joinUser = (
   player.attack = attack;
   player.speed = speed;
   player.inven = inven;
-  player.bulletRadius = bulletRadius;
+  player.shotNum = shotNum;
   player.bulletNum = bulletNum;
   player.color = color;
   player.name = name;
@@ -128,18 +128,7 @@ leaveUser = (id) => {
   delete playerMap[id];
 };
 
-updateState = (
-  id,
-  x,
-  y,
-  hp,
-  attack,
-  speed,
-  inven,
-  bulletRadius,
-  bulletNum,
-  dir
-) => {
+updateState = (id, x, y, hp, attack, speed, inven, shotNum, bulletNum, dir) => {
   let player = playerMap[id];
   if (!player) {
     return;
@@ -150,7 +139,7 @@ updateState = (
   player.attack = attack;
   player.speed = speed;
   player.inven = inven;
-  player.bulletRadius = bulletRadius;
+  player.shotNum = shotNum;
   player.bulletNum = bulletNum;
   player.dir = dir;
 };
@@ -169,7 +158,7 @@ socket.on("join_user", (data) => {
     data.attack,
     data.speed,
     data.inven,
-    data.bulletRadius,
+    data.shotNum,
     data.bulletNum,
     data.color,
     data.name
@@ -187,7 +176,7 @@ socket.on("update_state", (data) => {
     data.attack,
     data.speed,
     data.inven,
-    data.bulletRadius,
+    data.shotNum,
     data.bulletNum,
     data.dir
   );
@@ -195,16 +184,18 @@ socket.on("update_state", (data) => {
 socket.on("update_bullet", (data) => {
   for (let i = 0; i < players.length; i++) {
     if (players[i].id == data.id) {
-      createBullet(
-        data.id,
-        data.key,
-        data.dir,
-        data.damage,
-        data.x,
-        data.y,
-        data.color,
-        data.radius
-      );
+      for (let j = 0; j < players[i].shotNum; j++) {
+        createBullet(
+          data.id,
+          data.key,
+          data.dir,
+          data.damage,
+          data.x,
+          data.y + j * 10,
+          data.color,
+          data.radius
+        );
+      }
       break;
     }
   }
@@ -246,7 +237,7 @@ sendData = () => {
     attack: curPlayer.attack,
     speed: curPlayer.speed,
     inven: curPlayer.inven,
-    bulletRadius: curPlayer.bulletRadius,
+    shotNum: curPlayer.shotNum,
     bulletNum: curPlayer.bulletNum,
     dir: curPlayer.dir,
   };
@@ -263,7 +254,7 @@ sendBullet = () => {
     dir: curPlayer.dir,
     damage: curPlayer.attack,
     color: curPlayer.color,
-    radius: curPlayer.bulletRadius,
+    radius: 4,
   };
   if (data) socket.emit("send_bullet", data);
 };
@@ -283,6 +274,9 @@ sendCollider = (bullet_key) => {
     key: bullet_key,
   };
   if (data) socket.emit("collision_detect", data);
+  damage.load();
+  damage.volume = 0.7;
+  damage.play();
 };
 
 sendItemGet = (item_key) => {
@@ -318,9 +312,6 @@ collider = () => {
         } else {
           curPlayer.x -= 2;
         }
-        damage.load();
-        damage.volume = 0.7;
-        damage.play();
         break;
       }
     }
@@ -337,9 +328,15 @@ itemGet = () => {
           (curPlayer.getY() + 30 - item.getY()) ** 2
       ) <= 34
     ) {
+      if (curPlayer.inven.length < 3 && item.getType() != 2) {
+        if (curPlayer.inven.indexOf(item.getType()) == -1) {
+          curPlayer.setInven(item.getType());
+          console.log(curPlayer.getInven());
+        }
+      }
       curPlayer.setHp(Math.min(100, curPlayer.hp + item.hp_recover));
       curPlayer.setAttack(curPlayer.attack + item.attack);
-      curPlayer.setBulletRadius(curPlayer.bulletRadius + item.bullet_radius);
+      curPlayer.setShotNum(item.shot);
       curPlayer.setSpeed(curPlayer.speed + item.speed);
       sendItemGet(item.key);
       break;

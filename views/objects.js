@@ -7,7 +7,7 @@ class Player {
     this.attack = 2;
     this.speed = 2;
     this.inven = [];
-    this.bulletRadius = 4;
+    this.shotNum = 1;
     this.bulletNum = 6;
     this.img = new Image();
     this.color = color;
@@ -50,11 +50,11 @@ class Player {
   setInven(item) {
     this.inven.push(item);
   }
-  getBulletRadius() {
-    return this.bulletRadius;
+  getShotNum() {
+    return this.shotNum;
   }
-  setBulletRadius(radius) {
-    this.bulletRadius = radius;
+  setShotNum(shot) {
+    this.shotNum *= shot;
   }
   getBulletNum() {
     return this.bulletNum;
@@ -86,7 +86,7 @@ class Item {
 
     // 4가지 속성
     this.attack = 0;
-    this.bullet_radius = 0;
+    this.shot = 1;
     this.hp_recover = 0;
     this.speed = 0;
 
@@ -101,14 +101,14 @@ class Item {
         this.img.height = 50;
         this.attack = 1;
         this.hp_recover = 0;
-        this.bullet_radius = 0;
+        this.shot = 1;
         this.speed = 0;
         break;
       case 1:
         this.img.src = "/resource/double_shot.png";
-        this.img.width = 30;
+        this.img.width = 27;
         this.img.height = 50;
-        this.bullet_radius = 2;
+        this.shot = 2;
         this.attack = 0;
         this.hp_recover = 0;
         this.speed = 0;
@@ -118,7 +118,7 @@ class Item {
         this.img.width = 50;
         this.img.height = 25;
         this.hp_recover = 30;
-        this.bullet_radius = 0;
+        this.shot = 1;
         this.attack = 0;
         this.speed = 0;
         break;
@@ -126,9 +126,9 @@ class Item {
         this.img.src = "/resource/speed_up.png";
         this.img.width = 40;
         this.img.height = 40;
-        this.speed = 2;
+        this.speed = 0.5;
         this.attack = 0;
-        this.bullet_radius = 0;
+        this.shot = 1;
         this.hp_recover = 0;
         break;
 
@@ -165,7 +165,7 @@ class Bullet {
     this.dir = dir;
     this.damage = damage;
     this.color = color;
-    this.radius = radius;
+    this.radius = 4;
   }
   bulletUpdate(dir) {
     if (dir == "left") {
