@@ -382,6 +382,13 @@ gameOver = () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.closePath();
 
+  ctx.beginPath();
+  ctx.fillStyle = "#D5D5D5";
+  ctx.font = "bold 30px Sunday";
+  ctx.globalAlpha = 1;
+  ctx.fillText(`Press F5 to play again`, 210, 280);
+  ctx.closePath();
+
   if (curPlayer.id == winner) {
     ctx.beginPath();
     ctx.font = "bold 110px Sunday";
