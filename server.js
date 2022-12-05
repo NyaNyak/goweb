@@ -283,5 +283,7 @@ io.on("connection", (socket) => {
       winner: winner_id,
       reason: "game_win",
     });
+    endGame(socket);
+    socket.disconnect(false);
   });
 });

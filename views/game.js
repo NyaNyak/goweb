@@ -8,6 +8,8 @@ const reload = new Audio("./resource/reload.mp3");
 const victory = new Audio("./resource/victory.mp3");
 const defeat = new Audio("./resource/defeat.mp3");
 
+let root_URL = window.location.href;
+
 let rightPressed = false;
 let leftPressed = false;
 let upPressed = false;
@@ -438,9 +440,22 @@ update = () => {
 //renderPlayer();
 let game = setInterval(update, 10);
 
+let unload = true;
+
 window.addEventListener("beforeunload", (event) => {
   event.preventDefault();
-
   clearInterval(game);
   gameOver();
+
+  let sub = 10 + playerMap[myId].name.length;
+  root_URL = root_URL.substring(0, root_URL.length - sub);
+  console.log(root_URL);
+  let windowRef = window;
+
+  if (unload) {
+    setTimeout(() => {
+      windowRef.location.replace(root_URL);
+    }, 0);
+    unload = false;
+  }
 });
