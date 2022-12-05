@@ -360,8 +360,12 @@ itemGet = () => {
       }
       curPlayer.setHp(Math.min(200, curPlayer.hp + item.hp_recover));
       curPlayer.setAttack(curPlayer.attack + item.attack);
-      curPlayer.setShotNum(item.shot);
-      curPlayer.setSpeed(curPlayer.speed + item.speed);
+      if (curPlayer.getShotNum() < 4) {
+        curPlayer.setShotNum(item.shot);
+      }
+      if (curPlayer.getSpeed() < 5) {
+        curPlayer.setSpeed(curPlayer.speed + item.speed);
+      }
       sendItemGet(item.key);
       break;
     }
@@ -372,7 +376,7 @@ gameOver = () => {
   let curPlayer = playerMap[myId];
   ctx.beginPath();
   ctx.fillStyle = "black";
-  ctx.globalAlpha = 0.6;
+  ctx.globalAlpha = 0.5;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.closePath();
 

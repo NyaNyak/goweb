@@ -244,7 +244,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_bullet", (data) => {
-    console.log(data.radius);
     io.sockets.emit("update_bullet", {
       id: data.id,
       key: bulletKey++,
