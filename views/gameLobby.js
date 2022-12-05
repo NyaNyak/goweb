@@ -7,5 +7,5 @@ window.onpageshow = function (event) {
 };
 
 function handleOnInput(Yee) {
-  Yee.value = Yee.value.replace(/[^A-Za-Z]/gi, "");
+  Yee.value = Yee.value.replace(/[^a-zA-Z0-9]/gi, "");
 }
