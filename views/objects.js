@@ -169,9 +169,9 @@ class Bullet {
   }
   bulletUpdate(dir) {
     if (dir == "left") {
-      this.x -= 9;
+      this.x -= 8;
     } else {
-      this.x += 9;
+      this.x += 8;
     }
   }
   getKey() {

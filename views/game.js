@@ -363,7 +363,7 @@ itemGet = () => {
       if (curPlayer.getShotNum() < 4) {
         curPlayer.setShotNum(item.shot);
       }
-      if (curPlayer.getSpeed() < 5) {
+      if (curPlayer.getSpeed() < 3) {
         curPlayer.setSpeed(curPlayer.speed + item.speed);
       }
       sendItemGet(item.key);
@@ -437,3 +437,10 @@ update = () => {
 };
 //renderPlayer();
 let game = setInterval(update, 10);
+
+window.addEventListener("beforeunload", (event) => {
+  event.preventDefault();
+
+  clearInterval(game);
+  gameOver();
+});
