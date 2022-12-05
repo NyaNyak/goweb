@@ -5,3 +5,7 @@ window.onpageshow = function (event) {
   lobby.loop = true;
   lobby.play();
 };
+
+function handleOnInput(Yee) {
+  Yee.value = Yee.value.replace(/[^A-Za-Z]/gi, "");
+}
