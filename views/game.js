@@ -7,6 +7,7 @@ const damage = new Audio("./resource/damage.mp3");
 const reload = new Audio("./resource/reload.mp3");
 const victory = new Audio("./resource/victory.mp3");
 const defeat = new Audio("./resource/defeat.mp3");
+const equip = new Audio("./resource/item.mp3");
 
 let root_URL = window.location.href;
 
@@ -304,6 +305,9 @@ sendItemGet = (item_key) => {
     key: item_key,
   };
   if (data) socket.emit("itemGet_detect", data);
+  equip.load();
+  equip.volume = "1.0";
+  equip.play();
 };
 
 sendEndGame = (id) => {
